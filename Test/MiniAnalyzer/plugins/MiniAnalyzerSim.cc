@@ -320,27 +320,26 @@ MiniAnalyzerSim::beginJob()
 
    std::string outputfile;
    if (mcProcess_ == "sim1")
-      outputfile = "simoutputtest.root";
+      outputfile = "rootoutput/simoutput1.root";
    else if (mcProcess_ == "sim2")
-      outputfile = "simoutputtest2.root";
+      outputfile = "rootoutput/simoutput2.root";
    else if (mcProcess_ == "tt")
-      outputfile = "simoutputtestTT.root";
+      outputfile = "rootoutput/simoutputtt.root";
    else if (mcProcess_ == "ww")
-      outputfile = "simoutputtestww.root";
+      outputfile = "rootoutput/simoutputww.root";
    else if (mcProcess_ == "wz")
-      outputfile = "simoutputtestwz.root";
+      outputfile = "rootoutput/simoutputwz.root";
    else if (mcProcess_ == "zz")
-      outputfile = "simoutputtestzz.root";
+      outputfile = "rootoutput/simoutputzz.root";
    else if (mcProcess_ == "twtop")
-      outputfile = "simoutputtesttwtop.root";
+      outputfile = "rootoutput/simoutputtwtop.root";
    else if (mcProcess_ == "twantitop")
-      outputfile = "simoutputtesttwantitop.root";
+      outputfile = "rootoutput/simoutputtwantitop.root";
    else if (mcProcess_ == "tchantop")
-      outputfile = "simoutputtesttchantop.root";
+      outputfile = "rootoutput/simoutputtchantop.root";
    else if (mcProcess_ == "tchanantitop")
-      outputfile = "simoutputtesttchanantitop.root";
+      outputfile = "rootoutput/simoutputtchanantitop.root";
    fs = new TFile(outputfile.c_str(), "RECREATE");
-
 
 
    // jei atskirai weight sum
@@ -402,25 +401,25 @@ MiniAnalyzerSim::endJob()
 
    std::string weightFilename;
    if (mcProcess_ == "sim1")
-      weightFilename = "weight_sumtest.txt";
+      weightFilename = "weightsums/TESTweight_sum1.txt";
    else if (mcProcess_ == "sim2")
-      weightFilename = "weight_sumtest2.txt";
+      weightFilename = "weightsums/TESTweight_sum2.txt";
    else if (mcProcess_ == "tt")
-      weightFilename = "weight_sumtestTT.txt";
+      weightFilename = "weightsums/TESTweight_sumtt.txt";
    else if (mcProcess_ == "ww")
-      weightFilename = "weight_sumtestww.txt";
+      weightFilename = "weightsums/TESTweight_sumww.txt";
    else if (mcProcess_ == "wz")
-      weightFilename = "weight_sumtestwz.txt";
+      weightFilename = "weightsums/TESTweight_sumwz.txt";
    else if (mcProcess_ == "zz")
-      weightFilename = "weight_sumtestzz.txt";
+      weightFilename = "weightsums/TESTweight_sumzz.txt";
    else if (mcProcess_ == "twtop")
-      weightFilename = "weight_sumtesttwtop.txt";
+      weightFilename = "weightsums/TESTweight_sumtwtop.txt";
    else if (mcProcess_ == "twantitop")
-      weightFilename = "weight_sumtesttwantitop.txt";
+      weightFilename = "weightsums/TESTweight_sumtwantitop.txt";
    else if (mcProcess_ == "tchantop")
-      weightFilename = "weight_sumtesttchantop.txt";
+      weightFilename = "weightsums/TESTweight_sumtchantop.txt";
    else if (mcProcess_ == "tchanantitop")
-      weightFilename = "weight_sumtesttchanantitop.txt";
+      weightFilename = "weightsums/TESTweight_sumtchanantitop.txt";
    std::ofstream outFile(weightFilename.c_str());
    if (outFile.is_open())
    {

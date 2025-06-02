@@ -97,9 +97,7 @@ MiniAnalyzerSimTrue::MiniAnalyzerSimTrue(const edm::ParameterSet& iConfig):
       GenParticleToken_(consumes<std::vector<reco::GenParticle>>(iConfig.getUntrackedParameter<edm::InputTag>("GenParticle"))),
       weightToken_(consumes<GenEventInfoProduct>(iConfig.getUntrackedParameter<edm::InputTag>("GenEventInfo")))
 
-
 {
-
    usesResource("TFileService");
    simh_particle_pt = new TH1D("simh_particle_pt", "Particle PT", 100, 0, 150);
    simh_particle_eta = new TH1D("simh_particle_eta", "Particle ETA", 100, -2.5, 2.5);
@@ -136,7 +134,7 @@ MiniAnalyzerSimTrue::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
    double event_weight = weightHandle.isValid() ? weightHandle->weight() : 1.0;
    double norm_weight = event_weight / std::abs(event_weight);
    double weight = norm_weight * xsec * lumi / weight_sum;
-   std::cout << "weight: " << weight << std::endl;
+   // std::cout << "weight: " << weight << std::endl;
 
    edm::Handle<std::vector<reco::GenParticle>> particles;
    iEvent.getByToken(GenParticleToken_, particles);
@@ -147,11 +145,10 @@ MiniAnalyzerSimTrue::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
          if (abs(genParticle.pdgId()) == 13 && genParticle.fromHardProcessFinalState() == true) { //&& genParticle.status() == 1  parCand.fromHardProcessFinalState()
             selectedparticles.push_back(genParticle);
          }
-         
       }
-      std::cout << "there are " <<  selectedparticles.size()<<" particles" << std::endl;
+      // std::cout << "there are " <<  selectedparticles.size()<<" particles" << std::endl;
+
       if (selectedparticles.size() == 2){
-         
          
          double pt1 = selectedparticles[0].pt();
          double eta1 = selectedparticles[0].eta();
@@ -178,8 +175,8 @@ MiniAnalyzerSimTrue::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
          simh_particle_leading->Fill(pt1, weight);
          simh_particle_subleading->Fill(pt2, weight);
          
-         std::cout << "Particle 1: pt=" << pt1 << ", eta=" << eta1 << ", phi=" << phi1 << ", energy=" << energy1 << ", mass=" << mass1 << std::endl;
-         std::cout << "Particle 2: pt=" << pt2 << ", eta=" << eta2 << ", phi=" << phi2 << ", energy=" << energy2 << ", mass=" << mass2 << std::endl;
+         // std::cout << "Particle 1: pt=" << pt1 << ", eta=" << eta1 << ", phi=" << phi1 << ", energy=" << energy1 << ", mass=" << mass1 << std::endl;
+         // std::cout << "Particle 2: pt=" << pt2 << ", eta=" << eta2 << ", phi=" << phi2 << ", energy=" << energy2 << ", mass=" << mass2 << std::endl;
 
          math::PtEtaPhiELorentzVector particle1P4(pt1, eta1, phi1, energy1);
          math::PtEtaPhiELorentzVector particle2P4(pt2, eta2, phi2, energy2);
@@ -198,7 +195,7 @@ MiniAnalyzerSimTrue::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
          simh_Z_mass->Fill(Zboson_mass, weight);
          simh_Z_mass_fine->Fill(Zboson_mass, weight);
 
-         std::cout << "Z boson: pt=" << Zboson_pt << ", eta=" << Zboson_eta << ", phi=" << Zboson_phi << ", energy=" << Zboson_energy << ", mass=" << Zboson_mass<< std::endl;
+         // std::cout << "Z boson: pt=" << Zboson_pt << ", eta=" << Zboson_eta << ", phi=" << Zboson_phi << ", energy=" << Zboson_energy << ", mass=" << Zboson_mass<< std::endl;
       }
    }
 }
@@ -220,9 +217,9 @@ MiniAnalyzerSimTrue::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
 void 
 MiniAnalyzerSimTrue::beginJob()
 {
-   fs = new TFile("simoutputtrue1.root","RECREATE"); //simoutputtrue1.root for first, simoutputtrue2.root for second
+   fs = new TFile("rootoutput/simoutputtrue1.root","RECREATE"); //simoutputtrue1.root for first, simoutputtrue2.root for second
 
-   std::ifstream inFile("weight_sum.txt"); //weight_sum.txt for first, weight_sum2.txt for second
+   std::ifstream inFile("weightsums/weight_sum1.txt"); //weight_sum1.txt for first, weight_sum2.txt for second
    if (inFile.is_open())
    {
       inFile >> weight_sum;
@@ -255,11 +252,11 @@ MiniAnalyzerSimTrue::endJob()
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
 void
 MiniAnalyzerSimTrue::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
-  //The following says we do not know what parameters are allowed so do no validation
-  // Please change this to state exactly what you do use, even if it is no parameters
-  edm::ParameterSetDescription desc;
-  desc.setUnknown();
-  descriptions.addDefault(desc);
+   //The following says we do not know what parameters are allowed so do no validation
+   // Please change this to state exactly what you do use, even if it is no parameters
+   edm::ParameterSetDescription desc;
+   desc.setUnknown();
+   descriptions.addDefault(desc);
 }
 
 //define this as a plug-in

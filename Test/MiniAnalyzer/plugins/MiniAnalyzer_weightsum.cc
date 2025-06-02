@@ -76,9 +76,9 @@ MiniAnalyzer_weightsum::MiniAnalyzer_weightsum(const edm::ParameterSet& iConfig)
       muonToken_(consumes<std::vector<pat::Muon>>(iConfig.getParameter<edm::InputTag>("muons"))),
       weightToken_(consumes<GenEventInfoProduct>(iConfig.getUntrackedParameter<edm::InputTag>("GenEventInfo")))
 
-    {
-        usesResource("TFileService");
-    }
+{
+   usesResource("TFileService");
+}
 
 
 MiniAnalyzer_weightsum::~MiniAnalyzer_weightsum()
@@ -130,8 +130,8 @@ MiniAnalyzer_weightsum::beginJob()
 void 
 MiniAnalyzer_weightsum::endJob() 
 {
-   std::ofstream outFile("weight_sumtt.txt");
-   // weight_sum.txt  -  sim1
+   std::ofstream outFile("weightsums/weight_sumtt.txt");
+   // weight_sum1.txt  -  sim1
    // weight_sum2.txt  -  sim2
    // weight_sumtt.txt  -  tt
    // weight_sumww.txt  -  ww
