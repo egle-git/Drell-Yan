@@ -1,7 +1,7 @@
 import ROOT
 
-file_sim1 = ROOT.TFile.Open("rootoutput/simoutputtrue1.root", "READ")
-file_sim2 = ROOT.TFile.Open("rootoutput/simoutputtrue2.root", "READ")
+file_sim1 = ROOT.TFile.Open("rootoutputs/simoutputtrue1.root", "READ")
+file_sim2 = ROOT.TFile.Open("rootoutputs/simoutputtrue2.root", "READ")
 
 
 hist_names = {"simh_particle_pt", "simh_particle_eta", "simh_particle_phi",

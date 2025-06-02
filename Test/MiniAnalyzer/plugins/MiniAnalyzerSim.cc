@@ -320,25 +320,25 @@ MiniAnalyzerSim::beginJob()
 
    std::string outputfile;
    if (mcProcess_ == "sim1")
-      outputfile = "rootoutput/simoutput1.root";
+      outputfile = "rootoutputs/simoutput1.root";
    else if (mcProcess_ == "sim2")
-      outputfile = "rootoutput/simoutput2.root";
+      outputfile = "rootoutputs/simoutput2.root";
    else if (mcProcess_ == "tt")
-      outputfile = "rootoutput/simoutputtt.root";
+      outputfile = "rootoutputs/simoutputtt.root";
    else if (mcProcess_ == "ww")
-      outputfile = "rootoutput/simoutputww.root";
+      outputfile = "rootoutputs/simoutputww.root";
    else if (mcProcess_ == "wz")
-      outputfile = "rootoutput/simoutputwz.root";
+      outputfile = "rootoutputs/simoutputwz.root";
    else if (mcProcess_ == "zz")
-      outputfile = "rootoutput/simoutputzz.root";
+      outputfile = "rootoutputs/simoutputzz.root";
    else if (mcProcess_ == "twtop")
-      outputfile = "rootoutput/simoutputtwtop.root";
+      outputfile = "rootoutputs/simoutputtwtop.root";
    else if (mcProcess_ == "twantitop")
-      outputfile = "rootoutput/simoutputtwantitop.root";
+      outputfile = "rootoutputs/simoutputtwantitop.root";
    else if (mcProcess_ == "tchantop")
-      outputfile = "rootoutput/simoutputtchantop.root";
+      outputfile = "rootoutputs/simoutputtchantop.root";
    else if (mcProcess_ == "tchanantitop")
-      outputfile = "rootoutput/simoutputtchanantitop.root";
+      outputfile = "rootoutputs/simoutputtchanantitop.root";
    fs = new TFile(outputfile.c_str(), "RECREATE");
 
 

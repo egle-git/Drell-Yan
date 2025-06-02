@@ -30,17 +30,17 @@ weightsums = {
 }
 
 
-file_real = ROOT.TFile.Open("rootoutput/output.root", "READ")
-file_sim1 = ROOT.TFile.Open("rootoutput/simoutput1.root", "READ")
-file_sim2 = ROOT.TFile.Open("rootoutput/simoutput2.root", "READ")
-file_tt = ROOT.TFile.Open("rootoutput/simoutputtt.root", "READ")
-file_twtop = ROOT.TFile.Open("rootoutput/simoutputtwtop.root", "READ")
-file_twantitop = ROOT.TFile.Open("rootoutput/simoutputtwantitop.root", "READ")
-file_tchantop = ROOT.TFile.Open("rootoutput/simoutputtchantop.root", "READ")
-file_tchanantitop = ROOT.TFile.Open("rootoutput/simoutputtchanantitop.root", "READ")
-file_ww = ROOT.TFile.Open("rootoutput/simoutputww.root", "READ")
-file_wz = ROOT.TFile.Open("rootoutput/simoutputwz.root", "READ")
-file_zz = ROOT.TFile.Open("rootoutput/simoutputzz.root", "READ")
+file_real = ROOT.TFile.Open("rootoutputs/output.root", "READ")
+file_sim1 = ROOT.TFile.Open("rootoutputs/simoutput1.root", "READ")
+file_sim2 = ROOT.TFile.Open("rootoutputs/simoutput2.root", "READ")
+file_tt = ROOT.TFile.Open("rootoutputs/simoutputtt.root", "READ")
+file_twtop = ROOT.TFile.Open("rootoutputs/simoutputtwtop.root", "READ")
+file_twantitop = ROOT.TFile.Open("rootoutputs/simoutputtwantitop.root", "READ")
+file_tchantop = ROOT.TFile.Open("rootoutputs/simoutputtchantop.root", "READ")
+file_tchanantitop = ROOT.TFile.Open("rootoutputs/simoutputtchanantitop.root", "READ")
+file_ww = ROOT.TFile.Open("rootoutputs/simoutputww.root", "READ")
+file_wz = ROOT.TFile.Open("rootoutputs/simoutputwz.root", "READ")
+file_zz = ROOT.TFile.Open("rootoutputs/simoutputzz.root", "READ")
 
 hist_pairs = {
     "h_muon_pt": "simh_muon_pt",

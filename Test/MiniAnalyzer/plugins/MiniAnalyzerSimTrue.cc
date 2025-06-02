@@ -217,7 +217,7 @@ MiniAnalyzerSimTrue::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
 void 
 MiniAnalyzerSimTrue::beginJob()
 {
-   fs = new TFile("rootoutput/simoutputtrue1.root","RECREATE"); //simoutputtrue1.root for first, simoutputtrue2.root for second
+   fs = new TFile("rootoutputs/simoutputtrue1.root","RECREATE"); //simoutputtrue1.root for first, simoutputtrue2.root for second
 
    std::ifstream inFile("weightsums/weight_sum1.txt"); //weight_sum1.txt for first, weight_sum2.txt for second
    if (inFile.is_open())
