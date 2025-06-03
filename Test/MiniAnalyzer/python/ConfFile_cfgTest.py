@@ -27,6 +27,7 @@ process.hltHighLevel = cms.EDFilter("HLTHighLevel",
 
 process.demo = cms.EDAnalyzer('MiniAnalyzerTest',
                               muons = cms.InputTag("slimmedMuons"),
+                              vertices = cms.InputTag("offlineSlimmedPrimaryVertices")
 )
 
 

@@ -35,6 +35,9 @@
 
 #include "DataFormats/Math/interface/LorentzVector.h"
 
+#include "DataFormats/VertexReco/interface/Vertex.h"
+
+
 // class declaration
 
 // If the analyzer does not use TFileService, please remove
@@ -60,13 +63,16 @@ class MiniAnalyzerTest : public edm::one::EDAnalyzer<edm::one::SharedResources> 
         // ----------member data ---------------------------
 
         edm::EDGetTokenT<std::vector<pat::Muon>> muonToken_;
+        edm::EDGetTokenT<std::vector<reco::Vertex>> vertexToken_;
     
         TFile *fs;
         TTree *tree;
 
         float muon_pt1, muon_eta1, muon_phi1, muon_energy1, muon_mass1, muon_p1, muon_px1, muon_py1, muon_pz1, muon_charge1;
         float muon_pt2, muon_eta2, muon_phi2, muon_energy2, muon_mass2, muon_p2, muon_px2, muon_py2, muon_pz2, muon_charge2;
+        bool muon_loose1, muon_medium1, muon_tight1, muon_loose2, muon_medium2, muon_tight2;
         float Z_pt, Z_eta, Z_phi, Z_energy, Z_mass, Z_px, Z_py, Z_pz;
+        float isoSum, relIso, isoR03Chad, isoR03Nhad, isoR03Phet, isoR03Pupt, isoR04Chad, isoR04Nhad, isoR04Phet, isoR04Pupt;
 };
 
 // constants, enums and typedefs
@@ -74,7 +80,9 @@ class MiniAnalyzerTest : public edm::one::EDAnalyzer<edm::one::SharedResources> 
 // constructors and destructor
 
 
-MiniAnalyzerTest::MiniAnalyzerTest(const edm::ParameterSet& iConfig): muonToken_(consumes<std::vector<pat::Muon>>(iConfig.getParameter<edm::InputTag>("muons")))
+MiniAnalyzerTest::MiniAnalyzerTest(const edm::ParameterSet& iConfig):
+            muonToken_(consumes<std::vector<pat::Muon>>(iConfig.getParameter<edm::InputTag>("muons"))),
+            vertexToken_(consumes<std::vector<reco::Vertex>>(iConfig.getParameter<edm::InputTag>("vertices")))
 
 {
     usesResource("TFileService");
@@ -95,15 +103,26 @@ void MiniAnalyzerTest::analyze(const edm::Event& iEvent, const edm::EventSetup& 
     using namespace edm;
 
     edm::Handle<std::vector<pat::Muon>> muons;
+    edm::Handle<std::vector<reco::Vertex>> vertices;
     iEvent.getByToken(muonToken_, muons);
+    iEvent.getByToken(vertexToken_, vertices);
 
     if(muons.isValid() && muons->size() > 2){
         const pat::Muon* muon1 = nullptr;
         const pat::Muon* muon2 = nullptr;
+        const reco::Vertex& primaryVertex = (*vertices)[0];
         for (const auto& muon : *muons){
-            double isoSum = muon.pfIsolationR03().sumChargedHadronPt + muon.pfIsolationR03().sumNeutralHadronEt + muon.pfIsolationR03().sumPhotonEt;
+            isoSum = muon.pfIsolationR03().sumChargedHadronPt + muon.pfIsolationR03().sumNeutralHadronEt + muon.pfIsolationR03().sumPhotonEt;
+            isoR03Chad = muon.pfIsolationR03().sumChargedHadronPt;
+            isoR03Nhad = muon.pfIsolationR03().sumNeutralHadronEt;
+            isoR03Phet = muon.pfIsolationR03().sumPhotonEt;
+            isoR03Pupt = muon.pfIsolationR03().sumPUPt;
+            isoR04Chad = muon.pfIsolationR04().sumChargedHadronPt;
+            isoR04Nhad = muon.pfIsolationR04().sumNeutralHadronEt;
+            isoR04Phet = muon.pfIsolationR04().sumPhotonEt;
+            isoR04Pupt = muon.pfIsolationR04().sumPUPt;
             double muonPt = muon.pt();
-            double relIso = isoSum / muonPt;
+            relIso = isoSum / muonPt;
 
             if (isoSum < 100 && relIso < 0.15){
                 if (!muon1 || muon.pt() > muon1->pt()) {
@@ -127,6 +146,9 @@ void MiniAnalyzerTest::analyze(const edm::Event& iEvent, const edm::EventSetup& 
             muon_py1 = muon1->py();
             muon_pz1 = muon1->pz();
             muon_charge1 = muon1->charge();
+            muon_loose1 = muon1->isLooseMuon();
+            muon_medium1 = muon1->isMediumMuon();
+            muon_tight1 = muon1->isTightMuon(primaryVertex);
 
             muon_pt2 = muon2->pt();
             muon_eta2 = muon2->eta();
@@ -138,6 +160,10 @@ void MiniAnalyzerTest::analyze(const edm::Event& iEvent, const edm::EventSetup& 
             muon_py2 = muon1->py();
             muon_pz2 = muon1->pz();
             muon_charge2 = muon1->charge();
+            muon_loose2 = muon2->isLooseMuon();
+            muon_medium2 = muon2->isMediumMuon();
+            muon_tight2 = muon2->isTightMuon(primaryVertex);
+
 
             if (muon_pt1>=20 && muon_pt2>=12) {
                 math::PtEtaPhiELorentzVector muon1P4(muon_pt1, muon_eta1, muon_phi1, muon_energy1);
@@ -189,6 +215,9 @@ void MiniAnalyzerTest::beginJob()
     tree->Branch("muon_py1", &muon_py1);
     tree->Branch("muon_pz1", &muon_pz1);
     tree->Branch("muon_charge1", &muon_charge1);
+    tree->Branch("muon_loose1", &muon_loose1);
+    tree->Branch("muon_medium1", &muon_medium1);
+    tree->Branch("muon_tight1", &muon_tight1);
 
     tree->Branch("muon_pt2", &muon_pt2);
     tree->Branch("muon_eta2", &muon_eta2);
@@ -200,6 +229,9 @@ void MiniAnalyzerTest::beginJob()
     tree->Branch("muon_py2", &muon_py2);
     tree->Branch("muon_pz2", &muon_pz2);
     tree->Branch("muon_charge2", &muon_charge2);
+    tree->Branch("muon_loose2", &muon_loose2);
+    tree->Branch("muon_medium2", &muon_medium2);
+    tree->Branch("muon_tight2", &muon_tight2);
 
     tree->Branch("Z_pt", &Z_pt);
     tree->Branch("Z_eta", &Z_eta);
@@ -209,6 +241,17 @@ void MiniAnalyzerTest::beginJob()
     tree->Branch("Z_px", &Z_px);
     tree->Branch("Z_py", &Z_py);
     tree->Branch("Z_pz", &Z_pz);
+
+    tree->Branch("isoSum", &isoSum);
+    tree->Branch("relIso", &relIso);
+    tree->Branch("isoR03Chad", &isoR03Chad);
+    tree->Branch("isoR03Nhad", &isoR03Nhad);
+    tree->Branch("isoR03Phet", &isoR03Phet);
+    tree->Branch("isoR03Pupt", &isoR03Pupt);
+    tree->Branch("isoR04Chad", &isoR04Chad);
+    tree->Branch("isoR04Nhad", &isoR04Nhad);
+    tree->Branch("isoR04Phet", &isoR04Phet);
+    tree->Branch("isoR04Pupt", &isoR04Pupt);
 }
 
 // ------------ method called once each job just after ending the event loop  ------------
