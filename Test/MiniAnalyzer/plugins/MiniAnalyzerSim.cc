@@ -82,25 +82,10 @@ class MiniAnalyzerSim : public edm::one::EDAnalyzer<edm::one::SharedResources> {
       TH1D *simh_Z_mass_eq;
       TH1D *simh_Z_mass_fine;
 
-      // TH1D *simh_DYtau_muon_pt;
-      // TH1D *simh_DYtau_muon_eta;
-      // TH1D *simh_DYtau_muon_phi;
-      // TH1D *simh_DYtau_muon_energy;
-      // TH1D *simh_DYtau_muon_mass;
-      // TH1D *simh_DYtau_muon_leading;
-      // TH1D *simh_DYtau_muon_subleading;
-      // TH1D *simh_DYtau_Z_pt;
-      // TH1D *simh_DYtau_Z_eta;
-      // TH1D *simh_DYtau_Z_phi;
-      // TH1D *simh_DYtau_Z_energy;
-      // TH1D *simh_DYtau_Z_mass;
-      // TH1D *simh_DYtau_Z_mass_eq;
-      // TH1D *simh_DYtau_Z_mass_fine;
-
       TFile *fs;
 
       std::string mcProcess_;
-      Double_t weight_sum = 0; 
+      // Double_t weight_sum = 0; 
 };
 
 // constants, enums and typedefs
@@ -124,14 +109,6 @@ MiniAnalyzerSim::MiniAnalyzerSim(const edm::ParameterSet& iConfig):
    simh_muon_leading = new TH1D("simh_muon_leading", "Muon LEADING", 100, 0, 150);
    simh_muon_subleading = new TH1D("simh_muon_subleading", "Muon SUBLEADING", 100, 0, 150);
 
-   // simh_DYtau_muon_pt = new TH1D("simh_DYtau_muon_pt", "Muon PT", 100, 0, 150);
-   // simh_DYtau_muon_eta = new TH1D("simh_DYtau_muon_eta", "Muon ETA", 100, -2.5, 2.5);
-   // simh_DYtau_muon_phi = new TH1D("simh_DYtau_muon_phi", "Muon PHI", 100, -3.14, 3.14);
-   // simh_DYtau_muon_energy = new TH1D("simh_DYtau_muon_energy", "Muon ENERGY", 100, 0, 150);
-   // simh_DYtau_muon_mass = new TH1D("simh_DYtau_muon_mass", "Muon MASS", 100, 0.1055, 0.1059);
-   // simh_DYtau_muon_leading = new TH1D("simh_DYtau_muon_leading", "Muon LEADING", 100, 0, 150);
-   // simh_DYtau_muon_subleading = new TH1D("simh_DYtau_muon_subleading", "Muon SUBLEADING", 100, 0, 150);
-
    double bins[37]= {40,45,50,55,60,64,68,72,76,81,86,91,96,101,106,110,115,120,126,133,141,150,160,171,185,200,220,243,273,320,380,440,510,600,700,830,1000};
    int nbins = 36;
 
@@ -142,14 +119,6 @@ MiniAnalyzerSim::MiniAnalyzerSim(const edm::ParameterSet& iConfig):
    simh_Z_mass = new TH1D("simh_Z_mass", "Z Boson MASS", nbins, bins);
    simh_Z_mass_eq = new TH1D("simh_Z_mass_eq", "Z Boson MASS", 1000, 30, 1000);
    simh_Z_mass_fine = new TH1D("simh_Z_mass_fine", "Z BOSON MASS", 150, 70, 110);
-
-   // simh_DYtau_Z_pt = new TH1D("simh_DYtau_Z_pt", "Z Boson PT", 100, 0, 300);
-   // simh_DYtau_Z_eta = new TH1D("simh_DYtau_Z_eta", "Z Boson ETA", 100, -2.5, 2.5);
-   // simh_DYtau_Z_phi = new TH1D("simh_DYtau_Z_phi", "Z Boson PHI", 100, -3.14, 3.14);
-   // simh_DYtau_Z_energy = new TH1D("simh_DYtau_Z_energy", "Z Boson ENERGY", 100, 0, 500);
-   // simh_DYtau_Z_mass = new TH1D("simh_DYtau_Z_mass", "Z Boson MASS", nbins, bins);
-   // simh_DYtau_Z_mass_eq = new TH1D("simh_DYtau_Z_mass_eq", "Z Boson MASS", 1000, 30, 1000);
-   // simh_DYtau_Z_mass_fine = new TH1D("simh_DYtau_Z_mass_fine", "Z BOSON MASS", 150, 70, 110);
 }
 
 
@@ -173,7 +142,7 @@ MiniAnalyzerSim::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
    double weight = norm_weight;
    // double weight = norm_weight * xsec * lumi / weight_sum;-  jei atskirai weight sum
    // std::cout << "weight: " << weight << std::endl;
-   weight_sum += norm_weight;
+   // weight_sum += norm_weight;
 
    edm::Handle<std::vector<pat::Muon>> muons;
    iEvent.getByToken(muonToken_, muons);
@@ -211,56 +180,19 @@ MiniAnalyzerSim::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
          double mass2 = muon2->mass();
 
          if (pt1>=20 && pt2>=12) {
-            // edm::Handle<std::vector<reco::GenParticle>> genparticles;
-            // iEvent.getByToken(GenParticleToken_, genparticles);
 
-            // bool MuonsFinalState=true, TauFinalState=false;
-
-            // if(genparticles.isValid() && genparticles->size() >= 2){
-            //    std::vector<reco::GenParticle> selectedparticles;
-            //    for (const auto& genParticle : *genparticles){
-            //       if (genParticle.isHardProcess() && (std::abs(genParticle.pdgId()) == 13 || std::abs(genParticle.pdgId()) == 15)) { //&& genParticle.status() == 1  parCand.fromHardProcessFinalState()
-            //          selectedparticles.push_back(genParticle);
-            //       }
-            //    }
-            //    if (selectedparticles.size() == 2 && std::abs(selectedparticles[0].pdgId()) == 13 && std::abs(selectedparticles[1].pdgId()) == 13) {
-            //       MuonsFinalState = true;
-            //       TauFinalState = false;
-            //    }
-            //    else if (selectedparticles.size() == 2 && std::abs(selectedparticles[0].pdgId()) == 15 && std::abs(selectedparticles[1].pdgId()) == 15) {
-            //       MuonsFinalState = false;
-            //       TauFinalState = true;
-            //    }
-            // }
-
-            // if (MuonsFinalState) {
-               simh_muon_pt->Fill(pt1, weight);
-               simh_muon_pt->Fill(pt2, weight);
-               simh_muon_eta->Fill(eta1, weight);
-               simh_muon_eta->Fill(eta2, weight);
-               simh_muon_phi->Fill(phi1, weight);
-               simh_muon_phi->Fill(phi2, weight);
-               simh_muon_energy->Fill(energy1, weight);
-               simh_muon_energy->Fill(energy2, weight);
-               simh_muon_mass->Fill(mass1, weight);
-               simh_muon_mass->Fill(mass2, weight);
-               simh_muon_leading->Fill(pt1, weight);
-               simh_muon_subleading->Fill(pt2, weight);
-            // }
-            // else if (TauFinalState) {
-            //    simh_DYtau_muon_pt->Fill(pt1, weight);
-            //    simh_DYtau_muon_pt->Fill(pt2, weight);
-            //    simh_DYtau_muon_eta->Fill(eta1, weight);
-            //    simh_DYtau_muon_eta->Fill(eta2, weight);
-            //    simh_DYtau_muon_phi->Fill(phi1, weight);
-            //    simh_DYtau_muon_phi->Fill(phi2, weight);
-            //    simh_DYtau_muon_energy->Fill(energy1, weight);
-            //    simh_DYtau_muon_energy->Fill(energy2, weight);
-            //    simh_DYtau_muon_mass->Fill(mass1, weight);
-            //    simh_DYtau_muon_mass->Fill(mass2, weight);
-            //    simh_DYtau_muon_leading->Fill(pt1, weight);
-            //    simh_DYtau_muon_subleading->Fill(pt2, weight);
-            // }
+            simh_muon_pt->Fill(pt1, weight);
+            simh_muon_pt->Fill(pt2, weight);
+            simh_muon_eta->Fill(eta1, weight);
+            simh_muon_eta->Fill(eta2, weight);
+            simh_muon_phi->Fill(phi1, weight);
+            simh_muon_phi->Fill(phi2, weight);
+            simh_muon_energy->Fill(energy1, weight);
+            simh_muon_energy->Fill(energy2, weight);
+            simh_muon_mass->Fill(mass1, weight);
+            simh_muon_mass->Fill(mass2, weight);
+            simh_muon_leading->Fill(pt1, weight);
+            simh_muon_subleading->Fill(pt2, weight);
          
             // std::cout << "Muon 1: pt=" << pt1 << ", eta=" << eta1 << ", phi=" << phi1 << ", energy=" << energy1 << ", mass=" << mass1 << std::endl;
             // std::cout << "Muon 2: pt=" << pt2 << ", eta=" << eta2 << ", phi=" << phi2 << ", energy=" << energy2 << ", mass=" << mass2 << std::endl;
@@ -275,24 +207,13 @@ MiniAnalyzerSim::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
             double Zboson_energy = ZbosonP4.energy();
             double Zboson_mass = ZbosonP4.mass ();
 
-            // if (MuonsFinalState){
-               simh_Z_pt->Fill(Zboson_pt, weight);
-               simh_Z_eta->Fill(Zboson_eta, weight);
-               simh_Z_phi->Fill(Zboson_phi, weight);
-               simh_Z_energy->Fill(Zboson_energy, weight);
-               simh_Z_mass->Fill(Zboson_mass, weight);
-               simh_Z_mass_eq->Fill(Zboson_mass, weight);
-               simh_Z_mass_fine->Fill(Zboson_mass, weight);
-            // }
-            // else if (TauFinalState){
-            //    simh_DYtau_Z_pt->Fill(Zboson_pt, weight);
-            //    simh_DYtau_Z_eta->Fill(Zboson_eta, weight);
-            //    simh_DYtau_Z_phi->Fill(Zboson_phi, weight);
-            //    simh_DYtau_Z_energy->Fill(Zboson_energy, weight);
-            //    simh_DYtau_Z_mass->Fill(Zboson_mass, weight);
-            //    simh_DYtau_Z_mass_eq->Fill(Zboson_mass, weight);
-            //    simh_DYtau_Z_mass_fine->Fill(Zboson_mass, weight);
-            // }
+            simh_Z_pt->Fill(Zboson_pt, weight);
+            simh_Z_eta->Fill(Zboson_eta, weight);
+            simh_Z_phi->Fill(Zboson_phi, weight);
+            simh_Z_energy->Fill(Zboson_energy, weight);
+            simh_Z_mass->Fill(Zboson_mass, weight);
+            simh_Z_mass_eq->Fill(Zboson_mass, weight);
+            simh_Z_mass_fine->Fill(Zboson_mass, weight);
 
             // std::cout << "Z boson: pt=" << Zboson_pt << ", eta=" << Zboson_eta << ", phi=" << Zboson_phi << ", energy=" << Zboson_energy << ", mass=" << Zboson_mass<< std::endl;
          }
@@ -319,11 +240,7 @@ MiniAnalyzerSim::beginJob()
 {
 
    std::string outputfile;
-   if (mcProcess_ == "sim1")
-      outputfile = "rootoutputs/simoutput1.root";
-   else if (mcProcess_ == "sim2")
-      outputfile = "rootoutputs/simoutput2.root";
-   else if (mcProcess_ == "tt")
+   if (mcProcess_ == "tt")
       outputfile = "rootoutputs/simoutputtt.root";
    else if (mcProcess_ == "ww")
       outputfile = "rootoutputs/simoutputww.root";
@@ -344,8 +261,6 @@ MiniAnalyzerSim::beginJob()
 
    // jei atskirai weight sum
    // std::ifstream inFile("weight_sumtt.txt");
-   // // weight_sum.txt  -  sim1
-   // // weight_sum2.txt  -  sim2
    // // weight_sumtt.txt  -  tt
    // // weight_sumww.txt  -  ww
    // // weight_sumwz.txt  -  wz
@@ -382,50 +297,31 @@ MiniAnalyzerSim::endJob()
    simh_Z_mass_eq->Write();
    simh_Z_mass_fine->Write();
 
-   // simh_DYtau_muon_pt->Write();
-   // simh_DYtau_muon_eta->Write();
-   // simh_DYtau_muon_phi->Write();
-   // simh_DYtau_muon_energy->Write();
-   // simh_DYtau_muon_mass->Write();
-   // simh_DYtau_muon_leading->Write();
-   // simh_DYtau_muon_subleading->Write();
-   // simh_DYtau_Z_pt->Write();
-   // simh_DYtau_Z_eta->Write();
-   // simh_DYtau_Z_phi->Write();
-   // simh_DYtau_Z_energy->Write();
-   // simh_DYtau_Z_mass->Write();
-   // simh_DYtau_Z_mass_eq->Write();
-   // simh_DYtau_Z_mass_fine->Write();
-
    fs->Close();
 
-   std::string weightFilename;
-   if (mcProcess_ == "sim1")
-      weightFilename = "weightsums/TESTweight_sum1.txt";
-   else if (mcProcess_ == "sim2")
-      weightFilename = "weightsums/TESTweight_sum2.txt";
-   else if (mcProcess_ == "tt")
-      weightFilename = "weightsums/TESTweight_sumtt.txt";
-   else if (mcProcess_ == "ww")
-      weightFilename = "weightsums/TESTweight_sumww.txt";
-   else if (mcProcess_ == "wz")
-      weightFilename = "weightsums/TESTweight_sumwz.txt";
-   else if (mcProcess_ == "zz")
-      weightFilename = "weightsums/TESTweight_sumzz.txt";
-   else if (mcProcess_ == "twtop")
-      weightFilename = "weightsums/TESTweight_sumtwtop.txt";
-   else if (mcProcess_ == "twantitop")
-      weightFilename = "weightsums/TESTweight_sumtwantitop.txt";
-   else if (mcProcess_ == "tchantop")
-      weightFilename = "weightsums/TESTweight_sumtchantop.txt";
-   else if (mcProcess_ == "tchanantitop")
-      weightFilename = "weightsums/TESTweight_sumtchanantitop.txt";
-   std::ofstream outFile(weightFilename.c_str());
-   if (outFile.is_open())
-   {
-      outFile << weight_sum << std::endl;
-      outFile.close();
-   }
+   // std::string weightFilename;
+   // if (mcProcess_ == "tt")
+   //    weightFilename = "weightsums/TESTweight_sumtt.txt";
+   // else if (mcProcess_ == "ww")
+   //    weightFilename = "weightsums/TESTweight_sumww.txt";
+   // else if (mcProcess_ == "wz")
+   //    weightFilename = "weightsums/TESTweight_sumwz.txt";
+   // else if (mcProcess_ == "zz")
+   //    weightFilename = "weightsums/TESTweight_sumzz.txt";
+   // else if (mcProcess_ == "twtop")
+   //    weightFilename = "weightsums/TESTweight_sumtwtop.txt";
+   // else if (mcProcess_ == "twantitop")
+   //    weightFilename = "weightsums/TESTweight_sumtwantitop.txt";
+   // else if (mcProcess_ == "tchantop")
+   //    weightFilename = "weightsums/TESTweight_sumtchantop.txt";
+   // else if (mcProcess_ == "tchanantitop")
+   //    weightFilename = "weightsums/TESTweight_sumtchanantitop.txt";
+   // std::ofstream outFile(weightFilename.c_str());
+   // if (outFile.is_open())
+   // {
+   //    outFile << weight_sum << std::endl;
+   //    outFile.close();
+   // }
 }
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------

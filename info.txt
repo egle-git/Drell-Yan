@@ -52,3 +52,7 @@ Resonance Mass (M): 90.90609941937973 GeV
 Width (Gamma): 4.860881722960363 GeV
 Normalization (Parameter 0): 66767400122.97027
 Chi2/NDF: 5.392271655256719
+
+
+
+# HLT_IsoMu24 o kitas 5

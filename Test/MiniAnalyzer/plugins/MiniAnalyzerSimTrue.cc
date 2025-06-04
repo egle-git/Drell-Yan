@@ -64,7 +64,6 @@ class MiniAnalyzerSimTrue : public edm::one::EDAnalyzer<edm::one::SharedResource
       virtual void endJob() override;
 
       edm::EDGetTokenT<std::vector<reco::GenParticle>> GenParticleToken_;
-      //edm::EDGetTokenT<std::vector<reco::GenParticle>> GenParticleToken_;
       edm::EDGetTokenT<GenEventInfoProduct> weightToken_;
 
 
