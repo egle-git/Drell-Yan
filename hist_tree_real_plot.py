@@ -145,7 +145,7 @@ for hist_name, (bins, xmin, xmax) in histograms.items():
     # legend.Draw()
 
 
-    canvas.SaveAs(f"hist_test_data_tightmuon_hist/new_{hist_name}.png")
+    canvas.SaveAs(f"hist_tree_real_data_tightmuon_hist/new_{hist_name}.png")
     canvas.Close()
 
 file.Close()
@@ -254,7 +254,7 @@ file.Close()
 #         legend.AddEntry(combined_func, "Approximation", "l")
 #     # legend.Draw()
 
-#     canvas.SaveAs(f"hist_tree_data_hist/{hist_name}.png")
+#     canvas.SaveAs(f"hist_tree_real_data_hist/{hist_name}.png")
 #     canvas.Close()
 
 # file.Close()

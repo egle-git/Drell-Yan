@@ -71,19 +71,21 @@ class MiniAnalyzerTreeSim12 : public edm::one::EDAnalyzer<edm::one::SharedResour
         edm::EDGetTokenT<std::vector<reco::Vertex>> vertexToken_;
 
         TFile *fs;
-        TTree *tree;
+        TTree *tree_muon;
+        TTree *tree_tau;
 
         float muon_pt1, muon_eta1, muon_phi1, muon_energy1, muon_mass1, muon_p1, muon_px1, muon_py1, muon_pz1, muon_charge1;
         float muon_pt2, muon_eta2, muon_phi2, muon_energy2, muon_mass2, muon_p2, muon_px2, muon_py2, muon_pz2, muon_charge2;
-        float tau_pt1, tau_eta1, tau_phi1, tau_energy1, tau_mass1, tau_p1, tau_px1, tau_py1, tau_pz1, tau_charge1;
-        float tau_pt2, tau_eta2, tau_phi2, tau_energy2, tau_mass2, tau_p2, tau_px2, tau_py2, tau_pz2, tau_charge2;
         bool muon_loose1, muon_medium1, muon_tight1, muon_loose2, muon_medium2, muon_tight2;
         float Z_pt, Z_eta, Z_phi, Z_energy, Z_mass, Z_px, Z_py, Z_pz;
+        float muon_isoSum1, muon_isoSum2, muon_isoSumCorr1, muon_isoSumCorr2, muon_relIso1, muon_relIso2, muon_event_weight, muon_norm_weight;
+
+        float tau_pt1, tau_eta1, tau_phi1, tau_energy1, tau_mass1, tau_p1, tau_px1, tau_py1, tau_pz1, tau_charge1;
+        float tau_pt2, tau_eta2, tau_phi2, tau_energy2, tau_mass2, tau_p2, tau_px2, tau_py2, tau_pz2, tau_charge2;
         float tauZ_pt, tauZ_eta, tauZ_phi, tauZ_energy, tauZ_mass, tauZ_px, tauZ_py, tauZ_pz;
-        float isoSum, isoSumCorr, relIso, muon_event_weight, muon_norm_weight, tau_event_weight, tau_norm_weight;
+        float tau_isoSum1, tau_isoSum2, tau_isoSumCorr1, tau_isoSumCorr2, tau_relIso1, tau_relIso2, tau_event_weight, tau_norm_weight;
 
         std::string mcProcess_;
-        // Double_t weight_sum = 0; 
 };
 
 // constants, enums and typedefs
@@ -126,7 +128,6 @@ MiniAnalyzerTreeSim12::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 
     double event_weight = weightHandle.isValid() ? weightHandle->weight() : 1.0;
     double norm_weight = event_weight / std::abs(event_weight);
-    // weight_sum += norm_weight;
 
     if(muons.isValid() && muons->size() > 2){
         const pat::Muon* muon1 = nullptr;
@@ -159,6 +160,10 @@ MiniAnalyzerTreeSim12::analyze(const edm::Event& iEvent, const edm::EventSetup& 
             double eta2 = muon2->eta();
             double phi2 = muon2->phi();
             double energy2 = muon2->energy();
+
+            math::PtEtaPhiELorentzVector muon1P4(pt1, eta1, phi1, energy1);
+            math::PtEtaPhiELorentzVector muon2P4(pt2, eta2, phi2, energy2);
+            auto ZbosonP4 = muon1P4 + muon2P4;
 
             if (pt1>=20 && pt2>=12) {
                 edm::Handle<std::vector<reco::GenParticle>> genparticles;
@@ -197,6 +202,9 @@ MiniAnalyzerTreeSim12::analyze(const edm::Event& iEvent, const edm::EventSetup& 
                     muon_loose1 = muon1->isLooseMuon();
                     muon_medium1 = muon1->isMediumMuon();
                     muon_tight1 = muon1->isTightMuon(primaryVertex);
+                    muon_isoSum1 = muon1.pfIsolationR03().sumChargedHadronPt + muon1.pfIsolationR03().sumNeutralHadronEt + muon1.pfIsolationR03().sumPhotonEt;
+                    muon_isoSumCorr1 = muon1.pfIsolationR03().sumChargedHadronPt + max(0., muon1.pfIsolationR03().sumNeutralHadronEt + muon1.pfIsolationR03().sumPhotonEt - 0.5 * muon1.pfIsolationR03().sumPUPt);
+                    muon_relIso1 = muon_isoSum1 / muon_pt1;
 
                     muon_pt2 = muon2->pt();
                     muon_eta2 = muon2->eta();
@@ -211,9 +219,23 @@ MiniAnalyzerTreeSim12::analyze(const edm::Event& iEvent, const edm::EventSetup& 
                     muon_loose2 = muon2->isLooseMuon();
                     muon_medium2 = muon2->isMediumMuon();
                     muon_tight2 = muon2->isTightMuon(primaryVertex);
+                    muon_isoSum2 = muon2.pfIsolationR03().sumChargedHadronPt + muon2.pfIsolationR03().sumNeutralHadronEt + muon2.pfIsolationR03().sumPhotonEt;
+                    muon_isoSumCorr2 = muon2.pfIsolationR03().sumChargedHadronPt + max(0., muon2.pfIsolationR03().sumNeutralHadronEt + muon2.pfIsolationR03().sumPhotonEt - 0.5 * muon2.pfIsolationR03().sumPUPt);
+                    muon_relIso2 = muon_isoSum2 / muon_pt2;
 
                     muon_event_weight = event_weight;
                     muon_norm_weight = norm_weight;
+
+                    Z_pt = ZbosonP4.pt();
+                    Z_eta = ZbosonP4.eta();
+                    Z_phi = ZbosonP4.phi();
+                    Z_energy = ZbosonP4.energy();
+                    Z_mass = ZbosonP4.mass();
+                    Z_px = ZbosonP4.px();
+                    Z_py = ZbosonP4.py();
+                    Z_pz = ZbosonP4.pz();
+
+                    tree_muon->Fill();
                 }
                 else if (TauFinalState) {
                     tau_pt1 = muon1->pt();
@@ -226,6 +248,9 @@ MiniAnalyzerTreeSim12::analyze(const edm::Event& iEvent, const edm::EventSetup& 
                     tau_py1 = muon1->py();
                     tau_pz1 = muon1->pz();
                     tau_charge1 = muon1->charge();
+                    tau_isoSum1 = muon1.pfIsolationR03().sumChargedHadronPt + muon1.pfIsolationR03().sumNeutralHadronEt + muon1.pfIsolationR03().sumPhotonEt;
+                    tau_isoSumCorr1 = muon1.pfIsolationR03().sumChargedHadronPt + max(0., muon1.pfIsolationR03().sumNeutralHadronEt + muon1.pfIsolationR03().sumPhotonEt - 0.5 * muon1.pfIsolationR03().sumPUPt);
+                    tau_relIso1 = tau_isoSum1 / tau_pt1;
 
                     tau_pt2 = muon2->pt();
                     tau_eta2 = muon2->eta();
@@ -237,29 +262,13 @@ MiniAnalyzerTreeSim12::analyze(const edm::Event& iEvent, const edm::EventSetup& 
                     tau_py2 = muon1->py();
                     tau_pz2 = muon1->pz();
                     tau_charge2 = muon1->charge();
+                    tau_isoSum1 = muon2.pfIsolationR03().sumChargedHadronPt + muon2.pfIsolationR03().sumNeutralHadronEt + muon2.pfIsolationR03().sumPhotonEt;
+                    tau_isoSumCorr1 = muon2.pfIsolationR03().sumChargedHadronPt + max(0., muon2.pfIsolationR03().sumNeutralHadronEt + muon2.pfIsolationR03().sumPhotonEt - 0.5 * muon2.pfIsolationR03().sumPUPt);
+                    tau_relIso1 = tau_isoSum2 / tau_pt2;
 
                     tau_event_weight = event_weight;
                     tau_norm_weight = norm_weight;
-                }
-         
-                // std::cout << "Muon 1: pt=" << pt1 << ", eta=" << eta1 << ", phi=" << phi1 << ", energy=" << energy1 << ", mass=" << mass1 << std::endl;
-                // std::cout << "Muon 2: pt=" << pt2 << ", eta=" << eta2 << ", phi=" << phi2 << ", energy=" << energy2 << ", mass=" << mass2 << std::endl;
 
-                math::PtEtaPhiELorentzVector muon1P4(pt1, eta1, phi1, energy1);
-                math::PtEtaPhiELorentzVector muon2P4(pt2, eta2, phi2, energy2);
-                auto ZbosonP4 = muon1P4 + muon2P4;
-
-                if (MuonsFinalState){
-                    Z_pt = ZbosonP4.pt();
-                    Z_eta = ZbosonP4.eta();
-                    Z_phi = ZbosonP4.phi();
-                    Z_energy = ZbosonP4.energy();
-                    Z_mass = ZbosonP4.mass();
-                    Z_px = ZbosonP4.px();
-                    Z_py = ZbosonP4.py();
-                    Z_pz = ZbosonP4.pz();
-                }
-                else if (TauFinalState){
                     tauZ_pt = ZbosonP4.pt();
                     tauZ_eta = ZbosonP4.eta();
                     tauZ_phi = ZbosonP4.phi();
@@ -268,11 +277,9 @@ MiniAnalyzerTreeSim12::analyze(const edm::Event& iEvent, const edm::EventSetup& 
                     tauZ_px = ZbosonP4.px();
                     tauZ_py = ZbosonP4.py();
                     tauZ_pz = ZbosonP4.pz();
+
+                    tree_tau->Fill();
                 }
-
-                tree->Fill();
-
-                // std::cout << "Z boson: pt=" << Zboson_pt << ", eta=" << Zboson_eta << ", phi=" << Zboson_phi << ", energy=" << Zboson_energy << ", mass=" << Zboson_mass<< std::endl;
             }
         }
     }
@@ -298,88 +305,102 @@ MiniAnalyzerTreeSim12::beginJob()
 
     std::string outputfile;
     if (mcProcess_ == "sim1")
-        outputfile = "rootoutputs/treeout1.root";
+        outputfile = "rootoutputs/treeout1Test.root";
     else if (mcProcess_ == "sim2")
-        outputfile = "rootoutputs/treeout2.root";
+        outputfile = "rootoutputs/treeout2Test.root";
     fs = new TFile(outputfile.c_str(), "RECREATE");
-    tree = new TTree("Events", "");
+    tree_muon = new TTree("Muon", "");
+    tree_tau = new TTree("Tau", "");
 
-    tree->Branch("muon_pt1", &muon_pt1);
-    tree->Branch("muon_eta1", &muon_eta1);
-    tree->Branch("muon_phi1", &muon_phi1);
-    tree->Branch("muon_energy1", &muon_energy1);
-    tree->Branch("muon_mass1", &muon_mass1);
-    tree->Branch("muon_p1", &muon_p1);
-    tree->Branch("muon_px1", &muon_px1);
-    tree->Branch("muon_py1", &muon_py1);
-    tree->Branch("muon_pz1", &muon_pz1);
-    tree->Branch("muon_charge1", &muon_charge1);
-    tree->Branch("muon_loose1", &muon_loose1);
-    tree->Branch("muon_medium1", &muon_medium1);
-    tree->Branch("muon_tight1", &muon_tight1);
+    tree_muon->Branch("muon_pt1", &muon_pt1);
+    tree_muon->Branch("muon_eta1", &muon_eta1);
+    tree_muon->Branch("muon_phi1", &muon_phi1);
+    tree_muon->Branch("muon_energy1", &muon_energy1);
+    tree_muon->Branch("muon_mass1", &muon_mass1);
+    tree_muon->Branch("muon_p1", &muon_p1);
+    tree_muon->Branch("muon_px1", &muon_px1);
+    tree_muon->Branch("muon_py1", &muon_py1);
+    tree_muon->Branch("muon_pz1", &muon_pz1);
+    tree_muon->Branch("muon_charge1", &muon_charge1);
+    tree_muon->Branch("muon_loose1", &muon_loose1);
+    tree_muon->Branch("muon_medium1", &muon_medium1);
+    tree_muon->Branch("muon_tight1", &muon_tight1);
+    tree_muon->Branch("muon_isoSum1", &muon_isoSum1);
+    tree_muon->Branch("muon_isoSumCorr1", &muon_isoSumCorr1);
+    tree_muon->Branch("muon_relIso1", &muon_relIso1);
 
-    tree->Branch("muon_pt2", &muon_pt2);
-    tree->Branch("muon_eta2", &muon_eta2);
-    tree->Branch("muon_phi2", &muon_phi2);
-    tree->Branch("muon_energy2", &muon_energy2);
-    tree->Branch("muon_mass2", &muon_mass2);
-    tree->Branch("muon_p2", &muon_p2);
-    tree->Branch("muon_px2", &muon_px2);
-    tree->Branch("muon_py2", &muon_py2);
-    tree->Branch("muon_pz2", &muon_pz2);
-    tree->Branch("muon_charge2", &muon_charge2);
-    tree->Branch("muon_loose2", &muon_loose2);
-    tree->Branch("muon_medium2", &muon_medium2);
-    tree->Branch("muon_tight2", &muon_tight2);
+    tree_muon->Branch("muon_pt2", &muon_pt2);
+    tree_muon->Branch("muon_eta2", &muon_eta2);
+    tree_muon->Branch("muon_phi2", &muon_phi2);
+    tree_muon->Branch("muon_energy2", &muon_energy2);
+    tree_muon->Branch("muon_mass2", &muon_mass2);
+    tree_muon->Branch("muon_p2", &muon_p2);
+    tree_muon->Branch("muon_px2", &muon_px2);
+    tree_muon->Branch("muon_py2", &muon_py2);
+    tree_muon->Branch("muon_pz2", &muon_pz2);
+    tree_muon->Branch("muon_charge2", &muon_charge2);
+    tree_muon->Branch("muon_loose2", &muon_loose2);
+    tree_muon->Branch("muon_medium2", &muon_medium2);
+    tree_muon->Branch("muon_tight2", &muon_tight2);
+    tree_muon->Branch("muon_isoSum2", &muon_isoSum2);
+    tree_muon->Branch("muon_isoSumCorr2", &muon_isoSumCorr2);
+    tree_muon->Branch("muon_relIso2", &muon_relIso2);
 
-    tree->Branch("tau_pt1", &tau_pt1);
-    tree->Branch("tau_eta1", &tau_eta1);
-    tree->Branch("tau_phi1", &tau_phi1);
-    tree->Branch("tau_energy1", &tau_energy1);
-    tree->Branch("tau_mass1", &tau_mass1);
-    tree->Branch("tau_p1", &tau_p1);
-    tree->Branch("tau_px1", &tau_px1);
-    tree->Branch("tau_py1", &tau_py1);
-    tree->Branch("tau_pz1", &tau_pz1);
-    tree->Branch("tau_charge1", &tau_charge1);
+    tree_muon->Branch("Z_pt", &Z_pt);
+    tree_muon->Branch("Z_eta", &Z_eta);
+    tree_muon->Branch("Z_phi", &Z_phi);
+    tree_muon->Branch("Z_energy", &Z_energy);
+    tree_muon->Branch("Z_mass", &Z_mass);
+    tree_muon->Branch("Z_px", &Z_px);
+    tree_muon->Branch("Z_py", &Z_py);
+    tree_muon->Branch("Z_pz", &Z_pz);
 
-    tree->Branch("tau_pt2", &tau_pt2);
-    tree->Branch("tau_eta2", &tau_eta2);
-    tree->Branch("tau_phi2", &tau_phi2);
-    tree->Branch("tau_energy2", &tau_energy2);
-    tree->Branch("tau_mass2", &tau_mass2);
-    tree->Branch("tau_p2", &tau_p2);
-    tree->Branch("tau_px2", &tau_px2);
-    tree->Branch("tau_py2", &tau_py2);
-    tree->Branch("tau_pz2", &tau_pz2);
-    tree->Branch("tau_charge2", &tau_charge2);
+    tree_muon->Branch("muon_event_weight", &muon_event_weight);
+    tree_muon->Branch("muon_norm_weight", &muon_norm_weight);
 
-    tree->Branch("Z_pt", &Z_pt);
-    tree->Branch("Z_eta", &Z_eta);
-    tree->Branch("Z_phi", &Z_phi);
-    tree->Branch("Z_energy", &Z_energy);
-    tree->Branch("Z_mass", &Z_mass);
-    tree->Branch("Z_px", &Z_px);
-    tree->Branch("Z_py", &Z_py);
-    tree->Branch("Z_pz", &Z_pz);
 
-    tree->Branch("tauZ_pt", &tauZ_pt);
-    tree->Branch("tauZ_eta", &tauZ_eta);
-    tree->Branch("tauZ_phi", &tauZ_phi);
-    tree->Branch("tauZ_energy", &tauZ_energy);
-    tree->Branch("tauZ_mass", &tauZ_mass);
-    tree->Branch("tauZ_px", &tauZ_px);
-    tree->Branch("tauZ_py", &tauZ_py);
-    tree->Branch("tauZ_pz", &tauZ_pz);
 
-    tree->Branch("isoSum", &isoSum);
-    tree->Branch("isoSumCorr", &isoSumCorr);
-    tree->Branch("relIso", &relIso);
+    tree_tau->Branch("tau_pt1", &tau_pt1);
+    tree_tau->Branch("tau_eta1", &tau_eta1);
+    tree_tau->Branch("tau_phi1", &tau_phi1);
+    tree_tau->Branch("tau_energy1", &tau_energy1);
+    tree_tau->Branch("tau_mass1", &tau_mass1);
+    tree_tau->Branch("tau_p1", &tau_p1);
+    tree_tau->Branch("tau_px1", &tau_px1);
+    tree_tau->Branch("tau_py1", &tau_py1);
+    tree_tau->Branch("tau_pz1", &tau_pz1);
+    tree_tau->Branch("tau_charge1", &tau_charge1);
+    tree_tau->Branch("tau_isoSum1", &tau_isoSum1);
+    tree_tau->Branch("tau_isoSumCorr1", &tau_isoSumCorr1);
+    tree_tau->Branch("tau_relIso1", &tau_relIso1);
 
-    tree->Branch("muon_event_weight", &muon_event_weight);
-    tree->Branch("muon_norm_weight", &muon_norm_weight);
-    tree->Branch("tau_event_weight", &tau_event_weight);
-    tree->Branch("tau_norm_weight", &tau_norm_weight);
+    tree_tau->Branch("tau_pt2", &tau_pt2);
+    tree_tau->Branch("tau_eta2", &tau_eta2);
+    tree_tau->Branch("tau_phi2", &tau_phi2);
+    tree_tau->Branch("tau_energy2", &tau_energy2);
+    tree_tau->Branch("tau_mass2", &tau_mass2);
+    tree_tau->Branch("tau_p2", &tau_p2);
+    tree_tau->Branch("tau_px2", &tau_px2);
+    tree_tau->Branch("tau_py2", &tau_py2);
+    tree_tau->Branch("tau_pz2", &tau_pz2);
+    tree_tau->Branch("tau_charge2", &tau_charge2);
+    tree_tau->Branch("tau_isoSum2", &tau_isoSum2);
+    tree_tau->Branch("tau_isoSumCorr2", &tau_isoSumCorr2);
+    tree_tau->Branch("tau_relIso2", &tau_relIso2);
+
+    tree_tau->Branch("tauZ_pt", &tauZ_pt);
+    tree_tau->Branch("tauZ_eta", &tauZ_eta);
+    tree_tau->Branch("tauZ_phi", &tauZ_phi);
+    tree_tau->Branch("tauZ_energy", &tauZ_energy);
+    tree_tau->Branch("tauZ_mass", &tauZ_mass);
+    tree_tau->Branch("tauZ_px", &tauZ_px);
+    tree_tau->Branch("tauZ_py", &tauZ_py);
+    tree_tau->Branch("tauZ_pz", &tauZ_pz);
+
+    tree_tau->Branch("tau_event_weight", &tau_event_weight);
+    tree_tau->Branch("tau_norm_weight", &tau_norm_weight);
+
+
 
     // jei atskirai weight sum
     // std::ifstream inFile("weight_sum1.txt");
@@ -398,7 +419,8 @@ void
 MiniAnalyzerTreeSim12::endJob() 
 {
     fs->cd();
-    tree->Write();
+    tree_muon->Write();
+    tree_tau->Write();
     fs->Close();
 
 //    std::string weightFilename;
