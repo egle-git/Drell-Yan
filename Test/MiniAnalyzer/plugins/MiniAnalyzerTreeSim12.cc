@@ -300,7 +300,7 @@ MiniAnalyzerTreeSim12::beginJob()
     if (mcProcess_ == "sim1")
         outputfile = "rootoutputs/treeout1.root";
     else if (mcProcess_ == "sim2")
-        outputfile = "rootoutputs/treeout22.root";
+        outputfile = "rootoutputs/treeout2.root";
     fs = new TFile(outputfile.c_str(), "RECREATE");
     tree = new TTree("Events", "");
 
