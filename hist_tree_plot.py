@@ -1,7 +1,7 @@
 import ROOT
 import array
 
-file = ROOT.TFile("rootoutputs/output_tree_real.root", "READ")
+file = ROOT.TFile("rootoutputs/treeout.root", "READ")
 tree = file.Get("Events")
 
 varbins = [40,45,50,55,60,64,68,72,76,81,86,91,96,101,106,110,115,120,126,133,141,150,160,171,185,200,220,243,273,320,380,440,510,600,700,830,1000]
@@ -35,7 +35,7 @@ histograms = {
     "Z_pz": (100, 0, 300)
 }
 
-ROOT.gStyle.SetOptStat(0)
+# ROOT.gStyle.SetOptStat(0)
 
 
 ##############################################################################
@@ -45,6 +45,13 @@ for i in range(tree.GetEntries()):
     tree.GetEntry(i)
     if tree.muon_tight1 and tree.muon_tight2:
         index.append(i)
+
+print(index)
+print("\n")
+print(len(index))
+print("\n")
+print(tree.GetEntries())
+print("\n")
 
 for hist_name, (bins, xmin, xmax) in histograms.items():
     canvas = ROOT.TCanvas(f"canvas_{hist_name}", hist_name, 800, 800)
@@ -135,7 +142,7 @@ for hist_name, (bins, xmin, xmax) in histograms.items():
         legend = ROOT.TLegend(0.65, 0.75, 0.9, 0.9)
         legend.AddEntry(hist, "Data", "l")
         legend.AddEntry(combined_func, "Approximation", "l")
-    legend.Draw()
+    # legend.Draw()
 
 
     canvas.SaveAs(f"hist_test_data_tightmuon_hist/new_{hist_name}.png")
@@ -245,7 +252,7 @@ file.Close()
 #         legend = ROOT.TLegend(0.65, 0.75, 0.9, 0.9)
 #         legend.AddEntry(hist, "Data", "l")
 #         legend.AddEntry(combined_func, "Approximation", "l")
-#     legend.Draw()
+#     # legend.Draw()
 
 #     canvas.SaveAs(f"hist_tree_data_hist/{hist_name}.png")
 #     canvas.Close()

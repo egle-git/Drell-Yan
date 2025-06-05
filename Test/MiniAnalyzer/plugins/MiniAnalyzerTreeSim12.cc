@@ -332,27 +332,27 @@ MiniAnalyzerTreeSim12::beginJob()
     tree->Branch("muon_medium2", &muon_medium2);
     tree->Branch("muon_tight2", &muon_tight2);
 
-    tree->Branch("tau_pt1", &muon_pt1);
-    tree->Branch("tau_eta1", &muon_eta1);
-    tree->Branch("tau_phi1", &muon_phi1);
-    tree->Branch("tau_energy1", &muon_energy1);
-    tree->Branch("tau_mass1", &muon_mass1);
-    tree->Branch("tau_p1", &muon_p1);
-    tree->Branch("tau_px1", &muon_px1);
-    tree->Branch("tau_py1", &muon_py1);
-    tree->Branch("tau_pz1", &muon_pz1);
-    tree->Branch("tau_charge1", &muon_charge1);
+    tree->Branch("tau_pt1", &tau_pt1);
+    tree->Branch("tau_eta1", &tau_eta1);
+    tree->Branch("tau_phi1", &tau_phi1);
+    tree->Branch("tau_energy1", &tau_energy1);
+    tree->Branch("tau_mass1", &tau_mass1);
+    tree->Branch("tau_p1", &tau_p1);
+    tree->Branch("tau_px1", &tau_px1);
+    tree->Branch("tau_py1", &tau_py1);
+    tree->Branch("tau_pz1", &tau_pz1);
+    tree->Branch("tau_charge1", &tau_charge1);
 
-    tree->Branch("tau_pt2", &muon_pt2);
-    tree->Branch("tau_eta2", &muon_eta2);
-    tree->Branch("tau_phi2", &muon_phi2);
-    tree->Branch("tau_energy2", &muon_energy2);
-    tree->Branch("tau_mass2", &muon_mass2);
-    tree->Branch("tau_p2", &muon_p2);
-    tree->Branch("tau_px2", &muon_px2);
-    tree->Branch("tau_py2", &muon_py2);
-    tree->Branch("tau_pz2", &muon_pz2);
-    tree->Branch("tau_charge2", &muon_charge2);
+    tree->Branch("tau_pt2", &tau_pt2);
+    tree->Branch("tau_eta2", &tau_eta2);
+    tree->Branch("tau_phi2", &tau_phi2);
+    tree->Branch("tau_energy2", &tau_energy2);
+    tree->Branch("tau_mass2", &tau_mass2);
+    tree->Branch("tau_p2", &tau_p2);
+    tree->Branch("tau_px2", &tau_px2);
+    tree->Branch("tau_py2", &tau_py2);
+    tree->Branch("tau_pz2", &tau_pz2);
+    tree->Branch("tau_charge2", &tau_charge2);
 
     tree->Branch("Z_pt", &Z_pt);
     tree->Branch("Z_eta", &Z_eta);
@@ -363,14 +363,14 @@ MiniAnalyzerTreeSim12::beginJob()
     tree->Branch("Z_py", &Z_py);
     tree->Branch("Z_pz", &Z_pz);
 
-    tree->Branch("tauZ_pt", &Z_pt);
-    tree->Branch("tauZ_eta", &Z_eta);
-    tree->Branch("tauZ_phi", &Z_phi);
-    tree->Branch("tauZ_energy", &Z_energy);
-    tree->Branch("tauZ_mass", &Z_mass);
-    tree->Branch("tauZ_px", &Z_px);
-    tree->Branch("tauZ_py", &Z_py);
-    tree->Branch("tauZ_pz", &Z_pz);
+    tree->Branch("tauZ_pt", &tauZ_pt);
+    tree->Branch("tauZ_eta", &tauZ_eta);
+    tree->Branch("tauZ_phi", &tauZ_phi);
+    tree->Branch("tauZ_energy", &tauZ_energy);
+    tree->Branch("tauZ_mass", &tauZ_mass);
+    tree->Branch("tauZ_px", &tauZ_px);
+    tree->Branch("tauZ_py", &tauZ_py);
+    tree->Branch("tauZ_pz", &tauZ_pz);
 
     tree->Branch("isoSum", &isoSum);
     tree->Branch("isoSumCorr", &isoSumCorr);
@@ -378,8 +378,8 @@ MiniAnalyzerTreeSim12::beginJob()
 
     tree->Branch("muon_event_weight", &muon_event_weight);
     tree->Branch("muon_norm_weight", &muon_norm_weight);
-    tree->Branch("tau_event_weight", &muon_event_weight);
-    tree->Branch("tau_norm_weight", &muon_norm_weight);
+    tree->Branch("tau_event_weight", &tau_event_weight);
+    tree->Branch("tau_norm_weight", &tau_norm_weight);
 
     // jei atskirai weight sum
     // std::ifstream inFile("weight_sum1.txt");
