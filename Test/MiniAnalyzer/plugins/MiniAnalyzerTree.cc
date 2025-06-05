@@ -73,7 +73,7 @@ class MiniAnalyzerTree : public edm::one::EDAnalyzer<edm::one::SharedResources> 
         float muon_pt2, muon_eta2, muon_phi2, muon_energy2, muon_mass2, muon_p2, muon_px2, muon_py2, muon_pz2, muon_charge2;
         bool muon_loose1, muon_medium1, muon_tight1, muon_loose2, muon_medium2, muon_tight2;
         float Z_pt, Z_eta, Z_phi, Z_energy, Z_mass, Z_px, Z_py, Z_pz;
-        float isoSum, isoSumCorr, relIso;
+        float isoSum1,, isoSum2, isoSumCorr1, isoSumCorr2, relIso1, relIso2;
 };
 
 // constants, enums and typedefs
@@ -148,6 +148,9 @@ void MiniAnalyzerTree::analyze(const edm::Event& iEvent, const edm::EventSetup& 
                 muon_loose1 = muon1->isLooseMuon();
                 muon_medium1 = muon1->isMediumMuon();
                 muon_tight1 = muon1->isTightMuon(primaryVertex);
+                isoSum1 = muon1.pfIsolationR03().sumChargedHadronPt + muon1.pfIsolationR03().sumNeutralHadronEt + muon1.pfIsolationR03().sumPhotonEt;
+                isoSumCorr1 = muon1.pfIsolationR03().sumChargedHadronPt + max(0., muon1.pfIsolationR03().sumNeutralHadronEt + muon1.pfIsolationR03().sumPhotonEt - 0.5 * muon1.pfIsolationR03().sumPUPt);
+                relIso1 = isoSum1 / muon_pt1;
 
                 muon_pt2 = muon2->pt();
                 muon_eta2 = muon2->eta();
@@ -162,6 +165,9 @@ void MiniAnalyzerTree::analyze(const edm::Event& iEvent, const edm::EventSetup& 
                 muon_loose2 = muon2->isLooseMuon();
                 muon_medium2 = muon2->isMediumMuon();
                 muon_tight2 = muon2->isTightMuon(primaryVertex);
+                isoSum2 = muon2.pfIsolationR03().sumChargedHadronPt + muon2.pfIsolationR03().sumNeutralHadronEt + muon2.pfIsolationR03().sumPhotonEt;
+                isoSumCorr2 = muon2.pfIsolationR03().sumChargedHadronPt + max(0., muon2.pfIsolationR03().sumNeutralHadronEt + muon2.pfIsolationR03().sumPhotonEt - 0.5 * muon2.pfIsolationR03().sumPUPt);
+                relIso2 = isoSum2 / muon_pt2;
 
                 math::PtEtaPhiELorentzVector muon1P4(muon_pt1, muon_eta1, muon_phi1, muon_energy1);
                 math::PtEtaPhiELorentzVector muon2P4(muon_pt2, muon_eta2, muon_phi2, muon_energy2);
@@ -215,6 +221,9 @@ void MiniAnalyzerTree::beginJob()
     tree->Branch("muon_loose1", &muon_loose1);
     tree->Branch("muon_medium1", &muon_medium1);
     tree->Branch("muon_tight1", &muon_tight1);
+    tree->Branch("isoSum1", &isoSum1);
+    tree->Branch("isoSumCorr1", &isoSumCorr1);
+    tree->Branch("relIso1", &relIso1);
 
     tree->Branch("muon_pt2", &muon_pt2);
     tree->Branch("muon_eta2", &muon_eta2);
@@ -229,6 +238,9 @@ void MiniAnalyzerTree::beginJob()
     tree->Branch("muon_loose2", &muon_loose2);
     tree->Branch("muon_medium2", &muon_medium2);
     tree->Branch("muon_tight2", &muon_tight2);
+    tree->Branch("isoSum2", &isoSum2);
+    tree->Branch("isoSumCorr2", &isoSumCorr2);
+    tree->Branch("relIso2", &relIso2);
 
     tree->Branch("Z_pt", &Z_pt);
     tree->Branch("Z_eta", &Z_eta);
@@ -238,10 +250,6 @@ void MiniAnalyzerTree::beginJob()
     tree->Branch("Z_px", &Z_px);
     tree->Branch("Z_py", &Z_py);
     tree->Branch("Z_pz", &Z_pz);
-
-    tree->Branch("isoSum", &isoSum);
-    tree->Branch("isoSumCorr", &isoSumCorr);
-    tree->Branch("relIso", &relIso);
 }
 
 // ------------ method called once each job just after ending the event loop  ------------
