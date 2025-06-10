@@ -35,9 +35,6 @@ histograms = {
     "Z_pz": (100, 0, 300)
 }
 
-# ROOT.gStyle.SetOptStat(0)
-
-
 ##############################################################################
 
 index = []
@@ -46,14 +43,8 @@ for i in range(tree.GetEntries()):
     if tree.muon_tight1 and tree.muon_tight2:
         index.append(i)
 
-print(index)
-print("\n")
-print(len(index))
-print("\n")
-print(tree.GetEntries())
-print("\n")
-
 for hist_name, (bins, xmin, xmax) in histograms.items():
+    ROOT.gStyle.SetOptStat(0)
     canvas = ROOT.TCanvas(f"canvas_{hist_name}", hist_name, 800, 800)
     if hist_name == "Z_mass":
         hist = ROOT.TH1F(hist_name, hist_name, nbins, array.array("d", varbins))
@@ -142,10 +133,10 @@ for hist_name, (bins, xmin, xmax) in histograms.items():
         legend = ROOT.TLegend(0.65, 0.75, 0.9, 0.9)
         legend.AddEntry(hist, "Data", "l")
         legend.AddEntry(combined_func, "Approximation", "l")
-    # legend.Draw()
+    legend.Draw()
 
 
-    canvas.SaveAs(f"hist_tree_real_data_tightmuon_hist/new_{hist_name}.png")
+    canvas.SaveAs(f"hist_tree_real_data_hist/tightid_{hist_name}.png")
     canvas.Close()
 
 file.Close()
@@ -156,6 +147,7 @@ file.Close()
 
 
 # for hist_name, (bins, xmin, xmax) in histograms.items():
+#     ROOT.gStyle.SetOptStat(0)
 #     canvas = ROOT.TCanvas(f"canvas_{hist_name}", hist_name, 800, 800)
 #     if hist_name == "Z_mass":
 #         hist = ROOT.TH1F(hist_name, hist_name, nbins, array.array("d", varbins))
@@ -252,7 +244,7 @@ file.Close()
 #         legend = ROOT.TLegend(0.65, 0.75, 0.9, 0.9)
 #         legend.AddEntry(hist, "Data", "l")
 #         legend.AddEntry(combined_func, "Approximation", "l")
-#     # legend.Draw()
+#     legend.Draw()
 
 #     canvas.SaveAs(f"hist_tree_real_data_hist/{hist_name}.png")
 #     canvas.Close()
