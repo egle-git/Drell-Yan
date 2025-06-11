@@ -1,0 +1,11 @@
+#CMS_mc_RunIISummer20UL16MiniAODv2_ZZ_TuneCP5_13TeV-pythia8_MINIAODSIM_106X_mcRun2_asymptotic_v17-v1_120000_file_index.json
+root://eospublic.cern.ch//eos/opendata/cms/mc/RunIISummer20UL16MiniAODv2/ZZ_TuneCP5_13TeV-pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/BB3EB5DF-6B33-E44E-8F0F-646EF7A48DC1.root
+root://eospublic.cern.ch//eos/opendata/cms/mc/RunIISummer20UL16MiniAODv2/ZZ_TuneCP5_13TeV-pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/D18CB66B-AE16-9D48-BD91-3A0F2C06AA73.root
+
+
+#CMS_mc_RunIISummer20UL16MiniAODv2_ZZ_TuneCP5_13TeV-pythia8_MINIAODSIM_106X_mcRun2_asymptotic_v17-v1_130000_file_index.json
+root://eospublic.cern.ch//eos/opendata/cms/mc/RunIISummer20UL16MiniAODv2/ZZ_TuneCP5_13TeV-pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/130000/1E61313A-A790-3147-913F-60180EC5696C.root
+root://eospublic.cern.ch//eos/opendata/cms/mc/RunIISummer20UL16MiniAODv2/ZZ_TuneCP5_13TeV-pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/130000/5C1A1722-04FC-EF45-A99F-66C7ED641C40.root
+root://eospublic.cern.ch//eos/opendata/cms/mc/RunIISummer20UL16MiniAODv2/ZZ_TuneCP5_13TeV-pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/130000/7EC0907C-2024-2B43-A412-E209D1865E26.root
+root://eospublic.cern.ch//eos/opendata/cms/mc/RunIISummer20UL16MiniAODv2/ZZ_TuneCP5_13TeV-pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/130000/AA993D5A-A46E-F94A-B8C7-D0F797D798FD.root
+root://eospublic.cern.ch//eos/opendata/cms/mc/RunIISummer20UL16MiniAODv2/ZZ_TuneCP5_13TeV-pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/130000/E25F98CA-24F5-1746-A290-E201AE2CD99B.root

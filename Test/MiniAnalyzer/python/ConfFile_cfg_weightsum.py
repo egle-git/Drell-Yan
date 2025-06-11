@@ -4,9 +4,9 @@ def read_filelist(file):
     with open(file, 'r') as f:
         return [line.strip() for line in f if line.strip() and not line.startswith('#')]
 
-filelist = read_filelist("rootfiles/rootfiles_test_sim1.txt")
-# rootfilessimone.txt  -  sim1
-# rootfilessimtwo.txt  -  sim2
+filelist = read_filelist("rootfiles/rootfiles_test_twantitop.txt")
+# rootfilessim1.txt  -  sim1
+# rootfilessim2.txt  -  sim2
 # rootfilessimtt.txt  -  tt
 # rootfilessimww.txt  -  ww
 # rootfilessimwz.txt  -  wz

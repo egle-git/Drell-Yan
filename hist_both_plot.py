@@ -269,4 +269,4 @@ for real_name, sim_name in hist_pairs.items():
     line.SetLineColor(ROOT.kBlack)
     line.Draw()
 
-    canvas.SaveAs(f"hist_both_data_hist/{real_name}.png")
+    canvas.SaveAs(f"hist_both_data_hist{real_name}.png")

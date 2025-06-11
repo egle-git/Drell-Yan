@@ -1,0 +1,11 @@
+#CMS_mc_RunIISummer20UL16MiniAODv2_DYJetsToLL_M-10to50_TuneCP5_13TeV-amcatnloFXFX-pythia8_MINIAODSIM_106X_mcRun2_asymptotic_v17-v2_2520000_file_index.json
+root://eospublic.cern.ch//eos/opendata/cms/mc/RunIISummer20UL16MiniAODv2/DYJetsToLL_M-10to50_TuneCP5_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v2/2520000/004C9E04-3C3F-4448-B60F-6BF1AE1E7943.root
+root://eospublic.cern.ch//eos/opendata/cms/mc/RunIISummer20UL16MiniAODv2/DYJetsToLL_M-10to50_TuneCP5_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v2/2520000/00AFEF80-1464-D049-A120-8588A9450F91.root
+root://eospublic.cern.ch//eos/opendata/cms/mc/RunIISummer20UL16MiniAODv2/DYJetsToLL_M-10to50_TuneCP5_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v2/2520000/00B19A6F-4BF6-5448-93E3-59C7859FD7D9.root
+root://eospublic.cern.ch//eos/opendata/cms/mc/RunIISummer20UL16MiniAODv2/DYJetsToLL_M-10to50_TuneCP5_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v2/2520000/036C4B51-49A9-FC43-AABF-0566F1F98364.root
+root://eospublic.cern.ch//eos/opendata/cms/mc/RunIISummer20UL16MiniAODv2/DYJetsToLL_M-10to50_TuneCP5_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v2/2520000/047F0C79-D6DC-4A42-A781-2DAF6E0BCA83.root
+root://eospublic.cern.ch//eos/opendata/cms/mc/RunIISummer20UL16MiniAODv2/DYJetsToLL_M-10to50_TuneCP5_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v2/2520000/04E023C7-FE03-1E48-A6D7-49C06CE11FF5.root
+root://eospublic.cern.ch//eos/opendata/cms/mc/RunIISummer20UL16MiniAODv2/DYJetsToLL_M-10to50_TuneCP5_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v2/2520000/05101953-FFC5-3E4D-9616-73489850A734.root
+root://eospublic.cern.ch//eos/opendata/cms/mc/RunIISummer20UL16MiniAODv2/DYJetsToLL_M-10to50_TuneCP5_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v2/2520000/05306039-A682-5944-9AA4-1957E9E2FB56.root
+root://eospublic.cern.ch//eos/opendata/cms/mc/RunIISummer20UL16MiniAODv2/DYJetsToLL_M-10to50_TuneCP5_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v2/2520000/05893CFF-1634-B743-B199-4A8C261C302A.root
+root://eospublic.cern.ch//eos/opendata/cms/mc/RunIISummer20UL16MiniAODv2/DYJetsToLL_M-10to50_TuneCP5_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v2/2520000/0686F658-9B75-0547-A8F2-7ADC4019412A.root
