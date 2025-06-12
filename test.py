@@ -16,18 +16,32 @@ xsecs = {
     "tchantop": 119.7,
     "tchanantitop": 71.74,
 }
+# weightsums = {
+#     "sim1": 4.96939e+07,
+#     "sim2": 3.69428e+07,
+#     "tt": 4.32772e+07,
+#     # "ttnew": ?,
+#     "ww": 1.5821e+07,
+#     "wz": 7.584e+06,
+#     "zz": 1.151e+06,
+#     "twtop": 3.36824e+06,
+#     "twantitop": 3.65433e+06,
+#     "tchantop": 5.54612e+07,
+#     "tchanantitop": 2.92337e+07,
+# }
+
 weightsums = {
-    "sim1": 4.96939e+07,
-    "sim2": 3.69428e+07,
-    "tt": 4.32772e+07,
-    # "ttnew": ?,
-    "ww": 1.5821e+07,
-    "wz": 7.584e+06,
-    "zz": 1.151e+06,
-    "twtop": 3.36824e+06,
-    "twantitop": 3.65433e+06,
-    "tchantop": 5.54612e+07,
-    "tchanantitop": 2.92337e+07,
+    "sim1": 544907,
+    "sim2":494561,
+    "tt": 373938,
+    # "ttnew": 169658,
+    "ww": 788000,
+    "wz": 331000,
+    "zz": 483000,
+    "twtop": 333250,
+    "twantitop": 673726,
+    "tchantop": 539780,
+    "tchanantitop": 835376,
 }
 
 varbins = [40,45,50,55,60,64,68,72,76,81,86,91,96,101,106,110,115,120,126,133,141,150,160,171,185,200,220,243,273,320,380,440,510,600,700,830,1000]
@@ -36,15 +50,15 @@ nbins = 36
 filesandtrees = {
     "real": {"file": "rootoutputs/treeout.root", "tree": "Events"},
     "sim1": {"file": "rootoutputs/treeout1.root", "tree": "Muon"},
-    # "sim2": {"file": "rootoutputs/treeout2.root", "tree": "Muon"},
+    "sim2": {"file": "rootoutputs/treeout2.root", "tree": "Muon"},
     "sim1_DYtau": {"file": "rootoutputs/treeout1.root", "tree": "Tau"},
-    # "sim2_DYtau": {"file": "rootoutputs/treeout2.root", "tree": "Tau"},
+    "sim2_DYtau": {"file": "rootoutputs/treeout2.root", "tree": "Tau"},
     "tt": {"file": "rootoutputs/treeouttt.root", "tree": "Events"},
     # "ttnew": {"file": "rootoutputs/treeoutttnew.root", "tree": "Events"},
-    "twtop": {"file": "rootoutputs/treeouttwtop.root", "tree": "Events"},
-    # "twantitop": {"file": "rootoutputs/treeouttwantitop.root", "tree": "Events"},
-    # "tchantop": {"file": "rootoutputs/treeouttchantop.root", "tree": "Events"},
-    # "tchanantitop": {"file": "rootoutputs/treeouttchanantitop.root", "tree": "Events"},
+    # "twtop": {"file": "rootoutputs/treeouttwtop.root", "tree": "Events"},
+    "twantitop": {"file": "rootoutputs/treeouttwantitop.root", "tree": "Events"},
+    "tchantop": {"file": "rootoutputs/treeouttchantop.root", "tree": "Events"},
+    "tchanantitop": {"file": "rootoutputs/treeouttchanantitop.root", "tree": "Events"},
     # "ww": {"file": "rootoutputs/treeoutww.root", "tree": "Events"},
     # "wz": {"file": "rootoutputs/treeoutwz.root", "tree": "Events"},
     # "zz": {"file": "rootoutputs/treeoutzz.root", "tree": "Events"},
@@ -123,10 +137,15 @@ for histname, histinfo in histograms.items():
     def scale_hist(name, branch):
         t = open_files[name]["tree"]
         weight = xsecs.get(name.replace("_DYtau", ""), 1) * lumi / weightsums.get(name.replace("_DYtau", ""), 1)
-        weight_expr = f"muon_event_weight*{weight}"
+        weight_expr = f"muon_norm_weight*{weight}"
         return fill_hist(t, branch, bins, xmin, xmax, weight_branch=weight_expr)
 
     branch = branches[0]
+
+    tree.Draw("muon_norm_weight>>hw(100, 0, 5)", "", "goff")
+    hw = ROOT.gDirectory.Get("hw")
+    print("Mean:", hw.GetMean(), "Entries:", hw.GetEntries())
+
 
     sim1 = scale_hist("sim1", branch)
     sim2 = scale_hist("sim2", branch) if "sim2" in open_files else ROOT.TH1F("empty2", "", bins, xmin, xmax)
