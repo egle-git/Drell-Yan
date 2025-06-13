@@ -209,7 +209,7 @@ void MiniAnalyzerTree::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 // ------------ method called once each job just before starting event loop  ------------
 void MiniAnalyzerTree::beginJob()
 {
-    fs = new TFile("rootoutputs/treeout.root","RECREATE");
+    fs = new TFile("rootoutputs/NEWtreeout.root","RECREATE");
     tree = new TTree("Events", "");
 
     tree->Branch("muon_pt1", &muon_pt1);

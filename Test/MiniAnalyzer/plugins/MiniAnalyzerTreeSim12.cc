@@ -314,9 +314,9 @@ MiniAnalyzerTreeSim12::beginJob()
 
     std::string outputfile;
     if (mcProcess_ == "sim1")
-        outputfile = "rootoutputs/treeout1.root";
+        outputfile = "rootoutputs/NEWtreeout1.root";
     else if (mcProcess_ == "sim2")
-        outputfile = "rootoutputs/treeout2.root";
+        outputfile = "rootoutputs/NEWtreeout2.root";
     fs = new TFile(outputfile.c_str(), "RECREATE");
     tree_muon = new TTree("Muon", "");
     tree_tau = new TTree("Tau", "");

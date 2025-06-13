@@ -228,23 +228,23 @@ MiniAnalyzerTreeSim::beginJob()
 
     std::string outputfile;
     if (mcProcess_ == "tt")
-        outputfile = "rootoutputs/treeouttt.root";
+        outputfile = "rootoutputs/NEWtreeouttt.root";
     else if (mcProcess_ == "ttnew")
-        outputfile = "rootoutputs/treeoutttnew.root";
+        outputfile = "rootoutputs/NEWtreeoutttnew.root";
     else if (mcProcess_ == "ww")
-        outputfile = "rootoutputs/treeoutww.root";
+        outputfile = "rootoutputs/NEWtreeoutww.root";
     else if (mcProcess_ == "wz")
-        outputfile = "rootoutputs/treeoutwz.root";
+        outputfile = "rootoutputs/NEWtreeoutwz.root";
     else if (mcProcess_ == "zz")
-        outputfile = "rootoutputs/treeoutzz.root";
+        outputfile = "rootoutputs/NEWtreeoutzz.root";
     else if (mcProcess_ == "twtop")
-        outputfile = "rootoutputs/treeouttwtop.root";
+        outputfile = "rootoutputs/NEWtreeouttwtop.root";
     else if (mcProcess_ == "twantitop")
-        outputfile = "rootoutputs/treeouttwantitop.root";
+        outputfile = "rootoutputs/NEWtreeouttwantitop.root";
     else if (mcProcess_ == "tchantop")
-        outputfile = "rootoutputs/treeouttchantop.root";
+        outputfile = "rootoutputs/NEWtreeouttchantop.root";
     else if (mcProcess_ == "tchanantitop")
-        outputfile = "rootoutputs/treeouttchanantitop.root";
+        outputfile = "rootoutputs/NEWtreeouttchanantitop.root";
     fs = new TFile(outputfile.c_str(), "RECREATE");
     tree = new TTree("Events", "");
 
