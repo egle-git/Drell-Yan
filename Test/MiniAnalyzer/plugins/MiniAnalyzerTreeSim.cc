@@ -229,6 +229,8 @@ MiniAnalyzerTreeSim::beginJob()
     std::string outputfile;
     if (mcProcess_ == "tt")
         outputfile = "rootoutputs/treeouttt.root";
+    else if (mcProcess_ == "ttnew")
+        outputfile = "rootoutputs/treeoutttnew.root";
     else if (mcProcess_ == "ww")
         outputfile = "rootoutputs/treeoutww.root";
     else if (mcProcess_ == "wz")

@@ -55,11 +55,11 @@ filesandtrees = {
     "sim2_DYtau": {"file": "rootoutputs/treeout2.root", "tree": "Tau"},
     "tt": {"file": "rootoutputs/treeouttt.root", "tree": "Events"},
     # "ttnew": {"file": "rootoutputs/treeoutttnew.root", "tree": "Events"},
-    # "twtop": {"file": "rootoutputs/treeouttwtop.root", "tree": "Events"},
+    "twtop": {"file": "rootoutputs/treeouttwtop.root", "tree": "Events"},
     "twantitop": {"file": "rootoutputs/treeouttwantitop.root", "tree": "Events"},
     "tchantop": {"file": "rootoutputs/treeouttchantop.root", "tree": "Events"},
     "tchanantitop": {"file": "rootoutputs/treeouttchanantitop.root", "tree": "Events"},
-    # "ww": {"file": "rootoutputs/treeoutww.root", "tree": "Events"},
+    "ww": {"file": "rootoutputs/treeoutww.root", "tree": "Events"},
     # "wz": {"file": "rootoutputs/treeoutwz.root", "tree": "Events"},
     # "zz": {"file": "rootoutputs/treeoutzz.root", "tree": "Events"},
 }
