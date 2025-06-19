@@ -81,12 +81,6 @@ class MiniAnalyzerTreeSim12 : public edm::one::EDAnalyzer<edm::one::SharedResour
         float muon_isoSum1, muon_isoSum2, muon_isoSumCorr1, muon_isoSumCorr2, muon_relIso1, muon_relIso2, muon_trackIso1, muon_trackIso2, muon_trackRelIso1, muon_trackRelIso2;
         float muon_event_weight, muon_norm_weight;
 
-        float tau_pt1, tau_eta1, tau_phi1, tau_energy1, tau_mass1, tau_p1, tau_px1, tau_py1, tau_pz1, tau_charge1;
-        float tau_pt2, tau_eta2, tau_phi2, tau_energy2, tau_mass2, tau_p2, tau_px2, tau_py2, tau_pz2, tau_charge2;
-        float tauZ_pt, tauZ_eta, tauZ_phi, tauZ_energy, tauZ_mass, tauZ_px, tauZ_py, tauZ_pz;
-        float tau_isoSum1, tau_isoSum2, tau_isoSumCorr1, tau_isoSumCorr2, tau_relIso1, tau_relIso2, tau_trackIso1, tau_trackIso2, tau_trackRelIso1, tau_trackRelIso2;
-        float tau_event_weight, tau_norm_weight;
-
         std::string mcProcess_;
 };
 
@@ -151,21 +145,8 @@ MiniAnalyzerTreeSim12::analyze(const edm::Event& iEvent, const edm::EventSetup& 
             }
         }
         if (muon1 && muon2){
-         
             double pt1 = muon1->pt();
-            double eta1 = muon1->eta();
-            double phi1 = muon1->phi();
-            double energy1 = muon1->energy();
-
             double pt2 = muon2->pt();
-            double eta2 = muon2->eta();
-            double phi2 = muon2->phi();
-            double energy2 = muon2->energy();
-
-            math::PtEtaPhiELorentzVector muon1P4(pt1, eta1, phi1, energy1);
-            math::PtEtaPhiELorentzVector muon2P4(pt2, eta2, phi2, energy2);
-            auto ZbosonP4 = muon1P4 + muon2P4;
-
             if (pt1>=20 && pt2>=12) {
                 edm::Handle<std::vector<reco::GenParticle>> genparticles;
                 iEvent.getByToken(GenParticleToken_, genparticles);
@@ -189,104 +170,64 @@ MiniAnalyzerTreeSim12::analyze(const edm::Event& iEvent, const edm::EventSetup& 
                     }
                 }
 
+                muon_pt1 = muon1->pt();
+                muon_eta1 = muon1->eta();
+                muon_phi1 = muon1->phi();
+                muon_energy1 = muon1->energy();
+                muon_mass1 = muon1->mass();
+                muon_p1 = muon1->p();
+                muon_px1 = muon1->px();
+                muon_py1 = muon1->py();
+                muon_pz1 = muon1->pz();
+                muon_charge1 = muon1->charge();
+                muon_loose1 = muon1->isLooseMuon();
+                muon_medium1 = muon1->isMediumMuon();
+                muon_tight1 = muon1->isTightMuon(primaryVertex);
+                muon_isoSum1 = muon1->pfIsolationR03().sumChargedHadronPt + muon1->pfIsolationR03().sumNeutralHadronEt + muon1->pfIsolationR03().sumPhotonEt;
+                muon_isoSumCorr1 = muon1->pfIsolationR03().sumChargedHadronPt + max(0., muon1->pfIsolationR03().sumNeutralHadronEt + muon1->pfIsolationR03().sumPhotonEt - 0.5 * muon1->pfIsolationR03().sumPUPt);
+                muon_relIso1 = muon_isoSum1 / muon_pt1;
+                muon_trackIso1 = muon1->isolationR03().sumPt;
+                muon_trackRelIso1 = muon_trackIso1 / muon_pt1;
+
+                muon_pt2 = muon2->pt();
+                muon_eta2 = muon2->eta();
+                muon_phi2 = muon2->phi();
+                muon_energy2 = muon2->energy();
+                muon_mass2 = muon2->mass();
+                muon_p2 = muon1->p();
+                muon_px2 = muon1->px();
+                muon_py2 = muon1->py();
+                muon_pz2 = muon1->pz();
+                muon_charge2 = muon1->charge();
+                muon_loose2 = muon2->isLooseMuon();
+                muon_medium2 = muon2->isMediumMuon();
+                muon_tight2 = muon2->isTightMuon(primaryVertex);
+                muon_isoSum2 = muon2->pfIsolationR03().sumChargedHadronPt + muon2->pfIsolationR03().sumNeutralHadronEt + muon2->pfIsolationR03().sumPhotonEt;
+                muon_isoSumCorr2 = muon2->pfIsolationR03().sumChargedHadronPt + max(0., muon2->pfIsolationR03().sumNeutralHadronEt + muon2->pfIsolationR03().sumPhotonEt - 0.5 * muon2->pfIsolationR03().sumPUPt);
+                muon_relIso2 = muon_isoSum2 / muon_pt2;
+                muon_trackIso2 = muon2->isolationR03().sumPt;
+                muon_trackRelIso2 = muon_trackIso2 / muon_pt2;
+
+                muon_event_weight = event_weight;
+                muon_norm_weight = norm_weight;
+
+                math::PtEtaPhiELorentzVector muon1P4(muon_pt1, muon_eta1, muon_phi1, muon_energy1);
+                math::PtEtaPhiELorentzVector muon2P4(muon_pt2, muon_eta2, muon_phi2, muon_energy2);
+                auto ZbosonP4 = muon1P4 + muon2P4;
+
+                Z_pt = ZbosonP4.pt();
+                Z_eta = ZbosonP4.eta();
+                Z_phi = ZbosonP4.phi();
+                Z_energy = ZbosonP4.energy();
+                Z_mass = ZbosonP4.mass();
+                Z_px = ZbosonP4.px();
+                Z_py = ZbosonP4.py();
+                Z_pz = ZbosonP4.pz();
+
                 if (MuonsFinalState) {
-                    muon_pt1 = muon1->pt();
-                    muon_eta1 = muon1->eta();
-                    muon_phi1 = muon1->phi();
-                    muon_energy1 = muon1->energy();
-                    muon_mass1 = muon1->mass();
-                    muon_p1 = muon1->p();
-                    muon_px1 = muon1->px();
-                    muon_py1 = muon1->py();
-                    muon_pz1 = muon1->pz();
-                    muon_charge1 = muon1->charge();
-                    muon_loose1 = muon1->isLooseMuon();
-                    muon_medium1 = muon1->isMediumMuon();
-                    muon_tight1 = muon1->isTightMuon(primaryVertex);
-                    muon_isoSum1 = muon1->pfIsolationR03().sumChargedHadronPt + muon1->pfIsolationR03().sumNeutralHadronEt + muon1->pfIsolationR03().sumPhotonEt;
-                    muon_isoSumCorr1 = muon1->pfIsolationR03().sumChargedHadronPt + max(0., muon1->pfIsolationR03().sumNeutralHadronEt + muon1->pfIsolationR03().sumPhotonEt - 0.5 * muon1->pfIsolationR03().sumPUPt);
-                    muon_relIso1 = muon_isoSum1 / muon_pt1;
-                    muon_trackIso1 = muon1->isolationR03().sumPt;
-                    muon_trackRelIso1 = muon_trackIso1 / muon_pt1;
-
-                    muon_pt2 = muon2->pt();
-                    muon_eta2 = muon2->eta();
-                    muon_phi2 = muon2->phi();
-                    muon_energy2 = muon2->energy();
-                    muon_mass2 = muon2->mass();
-                    muon_p2 = muon1->p();
-                    muon_px2 = muon1->px();
-                    muon_py2 = muon1->py();
-                    muon_pz2 = muon1->pz();
-                    muon_charge2 = muon1->charge();
-                    muon_loose2 = muon2->isLooseMuon();
-                    muon_medium2 = muon2->isMediumMuon();
-                    muon_tight2 = muon2->isTightMuon(primaryVertex);
-                    muon_isoSum2 = muon2->pfIsolationR03().sumChargedHadronPt + muon2->pfIsolationR03().sumNeutralHadronEt + muon2->pfIsolationR03().sumPhotonEt;
-                    muon_isoSumCorr2 = muon2->pfIsolationR03().sumChargedHadronPt + max(0., muon2->pfIsolationR03().sumNeutralHadronEt + muon2->pfIsolationR03().sumPhotonEt - 0.5 * muon2->pfIsolationR03().sumPUPt);
-                    muon_relIso2 = muon_isoSum2 / muon_pt2;
-                    muon_trackIso2 = muon2->isolationR03().sumPt;
-                    muon_trackRelIso2 = muon_trackIso2 / muon_pt2;
-
-                    muon_event_weight = event_weight;
-                    muon_norm_weight = norm_weight;
-
-                    Z_pt = ZbosonP4.pt();
-                    Z_eta = ZbosonP4.eta();
-                    Z_phi = ZbosonP4.phi();
-                    Z_energy = ZbosonP4.energy();
-                    Z_mass = ZbosonP4.mass();
-                    Z_px = ZbosonP4.px();
-                    Z_py = ZbosonP4.py();
-                    Z_pz = ZbosonP4.pz();
-
                     tree_muon->Fill();
                 }
                 else if (TauFinalState) {
-                    tau_pt1 = muon1->pt();
-                    tau_eta1 = muon1->eta();
-                    tau_phi1 = muon1->phi();
-                    tau_energy1 = muon1->energy();
-                    tau_mass1 = muon1->mass();
-                    tau_p1 = muon1->p();
-                    tau_px1 = muon1->px();
-                    tau_py1 = muon1->py();
-                    tau_pz1 = muon1->pz();
-                    tau_charge1 = muon1->charge();
-                    tau_isoSum1 = muon1->pfIsolationR03().sumChargedHadronPt + muon1->pfIsolationR03().sumNeutralHadronEt + muon1->pfIsolationR03().sumPhotonEt;
-                    tau_isoSumCorr1 = muon1->pfIsolationR03().sumChargedHadronPt + max(0., muon1->pfIsolationR03().sumNeutralHadronEt + muon1->pfIsolationR03().sumPhotonEt - 0.5 * muon1->pfIsolationR03().sumPUPt);
-                    tau_relIso1 = tau_isoSum1 / tau_pt1;
-                    tau_trackIso1 = muon1->isolationR03().sumPt;
-                    tau_trackRelIso1 = tau_trackIso1 / tau_pt1;
-
-                    tau_pt2 = muon2->pt();
-                    tau_eta2 = muon2->eta();
-                    tau_phi2 = muon2->phi();
-                    tau_energy2 = muon2->energy();
-                    tau_mass2 = muon2->mass();
-                    tau_p2 = muon1->p();
-                    tau_px2 = muon1->px();
-                    tau_py2 = muon1->py();
-                    tau_pz2 = muon1->pz();
-                    tau_charge2 = muon1->charge();
-                    tau_isoSum2 = muon2->pfIsolationR03().sumChargedHadronPt + muon2->pfIsolationR03().sumNeutralHadronEt + muon2->pfIsolationR03().sumPhotonEt;
-                    tau_isoSumCorr2 = muon2->pfIsolationR03().sumChargedHadronPt + max(0., muon2->pfIsolationR03().sumNeutralHadronEt + muon2->pfIsolationR03().sumPhotonEt - 0.5 * muon2->pfIsolationR03().sumPUPt);
-                    tau_relIso2 = tau_isoSum2 / tau_pt2;
-                    tau_trackIso2 = muon2->isolationR03().sumPt;
-                    tau_trackRelIso2 = tau_trackIso2 / tau_pt2;
-
-                    tau_event_weight = event_weight;
-                    tau_norm_weight = norm_weight;
-
-                    tauZ_pt = ZbosonP4.pt();
-                    tauZ_eta = ZbosonP4.eta();
-                    tauZ_phi = ZbosonP4.phi();
-                    tauZ_energy = ZbosonP4.energy();
-                    tauZ_mass = ZbosonP4.mass();
-                    tauZ_px = ZbosonP4.px();
-                    tauZ_py = ZbosonP4.py();
-                    tauZ_pz = ZbosonP4.pz();
-
                     tree_tau->Fill();
                 }
             }
@@ -294,7 +235,6 @@ MiniAnalyzerTreeSim12::analyze(const edm::Event& iEvent, const edm::EventSetup& 
     }
 }
    
-
 /** 
 #ifdef THIS_IS_AN_EVENT_EXAMPLE
     Handle<ExampleData> pIn;
@@ -314,9 +254,9 @@ MiniAnalyzerTreeSim12::beginJob()
 
     std::string outputfile;
     if (mcProcess_ == "sim1")
-        outputfile = "rootoutputs/NEWtreeout1.root";
+        outputfile = "rootoutputs/treeout1.root";
     else if (mcProcess_ == "sim2")
-        outputfile = "rootoutputs/NEWtreeout2.root";
+        outputfile = "rootoutputs/treeout2.root";
     fs = new TFile(outputfile.c_str(), "RECREATE");
     tree_muon = new TTree("Muon", "");
     tree_tau = new TTree("Tau", "");
@@ -373,51 +313,55 @@ MiniAnalyzerTreeSim12::beginJob()
 
 
 
-    tree_tau->Branch("tau_pt1", &tau_pt1);
-    tree_tau->Branch("tau_eta1", &tau_eta1);
-    tree_tau->Branch("tau_phi1", &tau_phi1);
-    tree_tau->Branch("tau_energy1", &tau_energy1);
-    tree_tau->Branch("tau_mass1", &tau_mass1);
-    tree_tau->Branch("tau_p1", &tau_p1);
-    tree_tau->Branch("tau_px1", &tau_px1);
-    tree_tau->Branch("tau_py1", &tau_py1);
-    tree_tau->Branch("tau_pz1", &tau_pz1);
-    tree_tau->Branch("tau_charge1", &tau_charge1);
-    tree_tau->Branch("tau_isoSum1", &tau_isoSum1);
-    tree_tau->Branch("tau_isoSumCorr1", &tau_isoSumCorr1);
-    tree_tau->Branch("tau_relIso1", &tau_relIso1);
-    tree_tau->Branch("tau_trackIso1", &tau_trackIso1);
-    tree_tau->Branch("tau_trackRelIso1", &tau_trackRelIso1);
+    tree_tau->Branch("muon_pt1", &muon_pt1);
+    tree_tau->Branch("muon_eta1", &muon_eta1);
+    tree_tau->Branch("muon_phi1", &muon_phi1);
+    tree_tau->Branch("muon_energy1", &muon_energy1);
+    tree_tau->Branch("muon_mass1", &muon_mass1);
+    tree_tau->Branch("muon_p1", &muon_p1);
+    tree_tau->Branch("muon_px1", &muon_px1);
+    tree_tau->Branch("muon_py1", &muon_py1);
+    tree_tau->Branch("muon_pz1", &muon_pz1);
+    tree_tau->Branch("muon_charge1", &muon_charge1);
+    tree_tau->Branch("muon_loose1", &muon_loose1);
+    tree_tau->Branch("muon_medium1", &muon_medium1);
+    tree_tau->Branch("muon_tight1", &muon_tight1);
+    tree_tau->Branch("muon_isoSum1", &muon_isoSum1);
+    tree_tau->Branch("muon_isoSumCorr1", &muon_isoSumCorr1);
+    tree_tau->Branch("muon_relIso1", &muon_relIso1);
+    tree_tau->Branch("muon_trackIso1", &muon_trackIso1);
+    tree_tau->Branch("muon_trackRelIso1", &muon_trackRelIso1);
 
-    tree_tau->Branch("tau_pt2", &tau_pt2);
-    tree_tau->Branch("tau_eta2", &tau_eta2);
-    tree_tau->Branch("tau_phi2", &tau_phi2);
-    tree_tau->Branch("tau_energy2", &tau_energy2);
-    tree_tau->Branch("tau_mass2", &tau_mass2);
-    tree_tau->Branch("tau_p2", &tau_p2);
-    tree_tau->Branch("tau_px2", &tau_px2);
-    tree_tau->Branch("tau_py2", &tau_py2);
-    tree_tau->Branch("tau_pz2", &tau_pz2);
-    tree_tau->Branch("tau_charge2", &tau_charge2);
-    tree_tau->Branch("tau_isoSum2", &tau_isoSum2);
-    tree_tau->Branch("tau_isoSumCorr2", &tau_isoSumCorr2);
-    tree_tau->Branch("tau_relIso2", &tau_relIso2);
-    tree_tau->Branch("tau_trackIso2", &tau_trackIso2);
-    tree_tau->Branch("tau_trackRelIso2", &tau_trackRelIso2);
+    tree_tau->Branch("muon_pt2", &muon_pt2);
+    tree_tau->Branch("muon_eta2", &muon_eta2);
+    tree_tau->Branch("muon_phi2", &muon_phi2);
+    tree_tau->Branch("muon_energy2", &muon_energy2);
+    tree_tau->Branch("muon_mass2", &muon_mass2);
+    tree_tau->Branch("muon_p2", &muon_p2);
+    tree_tau->Branch("muon_px2", &muon_px2);
+    tree_tau->Branch("muon_py2", &muon_py2);
+    tree_tau->Branch("muon_pz2", &muon_pz2);
+    tree_tau->Branch("muon_charge2", &muon_charge2);
+    tree_tau->Branch("muon_loose2", &muon_loose2);
+    tree_tau->Branch("muon_medium2", &muon_medium2);
+    tree_tau->Branch("muon_tight2", &muon_tight2);
+    tree_tau->Branch("muon_isoSum2", &muon_isoSum2);
+    tree_tau->Branch("muon_isoSumCorr2", &muon_isoSumCorr2);
+    tree_tau->Branch("muon_relIso2", &muon_relIso2);
+    tree_tau->Branch("muon_trackIso2", &muon_trackIso2);
+    tree_tau->Branch("muon_trackRelIso2", &muon_trackRelIso2);
 
-    tree_tau->Branch("tauZ_pt", &tauZ_pt);
-    tree_tau->Branch("tauZ_eta", &tauZ_eta);
-    tree_tau->Branch("tauZ_phi", &tauZ_phi);
-    tree_tau->Branch("tauZ_energy", &tauZ_energy);
-    tree_tau->Branch("tauZ_mass", &tauZ_mass);
-    tree_tau->Branch("tauZ_px", &tauZ_px);
-    tree_tau->Branch("tauZ_py", &tauZ_py);
-    tree_tau->Branch("tauZ_pz", &tauZ_pz);
+    tree_tau->Branch("Z_pt", &Z_pt);
+    tree_tau->Branch("Z_eta", &Z_eta);
+    tree_tau->Branch("Z_phi", &Z_phi);
+    tree_tau->Branch("Z_energy", &Z_energy);
+    tree_tau->Branch("Z_mass", &Z_mass);
+    tree_tau->Branch("Z_px", &Z_px);
+    tree_tau->Branch("Z_py", &Z_py);
+    tree_tau->Branch("Z_pz", &Z_pz);
 
-    tree_tau->Branch("tau_event_weight", &tau_event_weight);
-    tree_tau->Branch("tau_norm_weight", &tau_norm_weight);
-
-
+    tree_tau->Branch("muon_event_weight", &muon_event_weight);
+    tree_tau->Branch("muon_norm_weight", &muon_norm_weight);
 
     // jei atskirai weight sum
     // std::ifstream inFile("weight_sum1.txt");
@@ -428,7 +372,6 @@ MiniAnalyzerTreeSim12::beginJob()
     //    inFile >> weight_sum;
     //    inFile.close();
     // }
-
 }
 
 // ------------ method called once each job just after ending the event loop  ------------
@@ -439,18 +382,6 @@ MiniAnalyzerTreeSim12::endJob()
     tree_muon->Write();
     tree_tau->Write();
     fs->Close();
-
-//    std::string weightFilename;
-//    if (mcProcess_ == "sim1")
-//       weightFilename = "weightsums/TESTweight_sum1.txt";
-//    else if (mcProcess_ == "sim2")
-//       weightFilename = "weightsums/TESTweight_sum2.txt";
-//    std::ofstream outFile(weightFilename.c_str());
-//    if (outFile.is_open())
-//    {
-//       outFile << weight_sum << std::endl;
-//       outFile.close();
-//    }
 }
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
